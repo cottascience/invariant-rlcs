@@ -57,4 +57,4 @@ for epoch in range(args.epochs):
         loss = criterion(y_hat, y)
         loss.backward()
         optimizer.step()
-    print(accuracy(model, train_loader),loss)
+    print(accuracy(model, train_loader), accuracy(model, test_loader) , loss)
