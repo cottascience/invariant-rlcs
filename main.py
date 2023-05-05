@@ -47,7 +47,7 @@ def accuracy( model, loader ):
         correct += int((y_hat == y).sum())
         total += x.shape[0]
     model.train()
-    return correct/total
+    return correct/args.train_size
 
 # Train the MLP model
 for epoch in range(args.epochs):
