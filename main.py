@@ -27,7 +27,8 @@ args = parser.parse_args()
 model = models.MLP( num_layers=args.num_layers, layer_size = args.hidden_size, input_size=args.input_size, output_size=1, dropout_p=args.dropout, use_batchnorm=True )
 
 # Define the loss function (hinge loss)
-criterion = nn.HingeEmbeddingLoss(margin=args.margin)
+# criterion = nn.HingeEmbeddingLoss(margin=args.margin)
+criterion = nn.SoftMarginLoss()
 
 # Define the optimizer (Stochastic Gradient Descent) with L2 regularization
 optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
