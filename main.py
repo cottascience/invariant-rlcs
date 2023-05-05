@@ -44,7 +44,7 @@ test_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size)
 def accuracy( model, loader ):
     acc = 0
     for x,y in loader:
-        y_hat = model(x)
+        y_hat = torch.sign(model(x))
         acc += int((y_hat == y).sum())
     return acc/len(loader)
 
@@ -52,7 +52,7 @@ def accuracy( model, loader ):
 for epoch in range(args.epochs):
     for x,y in train_loader:
         optimizer.zero_grad()
-        y_hat = model(x)
+        y_hat = torch.sign(model(x))
         loss = criterion(y_hat, y)
         loss.backward()
         optimizer.step()
