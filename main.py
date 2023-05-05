@@ -31,9 +31,6 @@ criterion = nn.HingeEmbeddingLoss(margin=10)
 # Define the optimizer (Stochastic Gradient Descent) with L2 regularization
 optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-# Define the learning rate scheduler (Cosine Annealing)
-scheduler = CosineAnnealingLR(optimizer, T_max=args.epochs, eta_min=0)
-
 # Create the data loaders
 train_dataset = datasets.Parity( args.train_size, args.input_size  )
 test_dataset = datasets.Parity( args.test_size, args.input_size  )
@@ -49,9 +46,9 @@ def accuracy( model, loader ):
         correct += int((y_hat == y).sum())
         total += x.shape[0]
         print("###")
-        print(y_hat)
+        print(y_hat.tolist())
         print("---")
-        print(y)
+        print(y.tolist())
         print("$$$")
         print(y_hat == y)
     model.train()
