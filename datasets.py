@@ -19,7 +19,6 @@ class Ball(Dataset):
      def __init__(self, n, d, R=0.5, L=1):
          self.x = (torch.rand(n, d) - 0.5) * L
          self.y = 2*(torch.tensor((torch.norm(self.x,dim=1) < R), dtype=float)).unsqueeze(1) - 1
-         print(self.y)
          self.len = n
      # Getting the data
      def __getitem__(self, index):
