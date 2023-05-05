@@ -22,7 +22,6 @@ parser.add_argument('--dropout', type=float, default=0.0, help='dropout probabil
 parser.add_argument('--weight_decay', type=float, default=0.00, help='weight decay for L2 regularization')
 args = parser.parse_args()
 
-
 # Init the model
 model = models.MLP( num_layers=args.num_layers, layer_size = args.hidden_size, input_size=args.input_size, output_size=1, dropout_p=args.dropout, use_batchnorm=True )
 
