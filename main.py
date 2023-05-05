@@ -38,15 +38,17 @@ scheduler = CosineAnnealingLR(optimizer, T_max=args.epochs, eta_min=0)
 train_dataset = datasets.Parity( args.train_size, args.input_size  )
 test_dataset = datasets.Parity( args.test_size, args.input_size  )
 train_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size)
-test_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size)
+test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
 
 def accuracy( model, loader ):
+    model.eval()
     correct = 0
     total = 0
     for x,y in loader:
         y_hat = torch.sign(model(x))
         correct += int((y_hat == y).sum())
         total += x.shape[0]
+    model.train()
     return correct/total
 
 # Train the MLP model
