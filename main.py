@@ -44,9 +44,6 @@ def accuracy( model, loader ):
     for x,y in loader:
         y_hat = torch.sign(model(x))
         correct += torch.sum(y_hat == y)
-        print(y_hat == y)
-        print(y.shape, y_hat.shape, correct, y_hat.shape)
-        exit()
     model.train()
     return correct/args.train_size
 
