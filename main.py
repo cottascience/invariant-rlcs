@@ -15,7 +15,7 @@ parser.add_argument('--hidden_size', type=int, default=16, help='number of hidde
 parser.add_argument('--num_layers', type=int, default=2, help='number of hidden layers in the MLP')
 parser.add_argument('--train_size', type=int, default=10000, help='number of training examples')
 parser.add_argument('--test_size', type=int, default=1000, help='number of testing examples')
-parser.add_argument('--lr', type=float, default=0.1, help='initial learning rate for the optimizer')
+parser.add_argument('--lr', type=float, default=0.01, help='initial learning rate for the optimizer')
 parser.add_argument('--epochs', type=int, default=1000, help='number of epochs to train for')
 parser.add_argument('--batch_size', type=int, default=64, help='mini-batch size for training')
 parser.add_argument('--dropout', type=float, default=0.0, help='dropout probability for the MLP')
@@ -54,7 +54,7 @@ def accuracy( model, loader ):
 for epoch in range(args.epochs):
     for x,y in train_loader:
         optimizer.zero_grad()
-        y_hat = torch.sign(model(x))
+        y_hat = model(x)
         loss = criterion(y_hat, y)
         loss.backward()
         optimizer.step()
