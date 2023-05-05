@@ -41,12 +41,11 @@ test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
 def accuracy( model, loader ):
     model.eval()
     correct = 0
-    total = 0
     for x,y in loader:
         y_hat = torch.sign(model(x))
         correct += int((y_hat == y).sum())
-        total += x.shape[0]
-        print(correct, x.shape, args.train_size)
+        print(correct, y_hat.shape)
+        exit()
     model.train()
     return correct/args.train_size
 
