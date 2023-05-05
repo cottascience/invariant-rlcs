@@ -32,8 +32,8 @@ criterion = nn.HingeEmbeddingLoss(margin=10)
 optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
 # Create the data loaders
-train_dataset = datasets.Parity( args.train_size, args.input_size  )
-test_dataset = datasets.Parity( args.test_size, args.input_size  )
+train_dataset = datasets.Ball( args.train_size, args.input_size  )
+test_dataset = datasets.Ball( args.test_size, args.input_size  )
 train_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size)
 test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
 
@@ -45,12 +45,7 @@ def accuracy( model, loader ):
         y_hat = torch.sign(model(x))
         correct += int((y_hat == y).sum())
         total += x.shape[0]
-        print("###")
-        print(y_hat.tolist())
-        print("---")
-        print(y.tolist())
-        print("$$$")
-        print(y_hat == y)
+    print(y_hat == y)
     model.train()
     return correct/total
 
