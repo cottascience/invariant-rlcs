@@ -20,13 +20,14 @@ parser.add_argument('--epochs', type=int, default=1000, help='number of epochs t
 parser.add_argument('--batch_size', type=int, default=64, help='mini-batch size for training')
 parser.add_argument('--dropout', type=float, default=0.0, help='dropout probability for the MLP')
 parser.add_argument('--weight_decay', type=float, default=0.00, help='weight decay for L2 regularization')
+parser.add_argument('--margin', type=float, default=1.00, help='margin in hinge loss')
 args = parser.parse_args()
 
 # Init the model
 model = models.MLP( num_layers=args.num_layers, layer_size = args.hidden_size, input_size=args.input_size, output_size=1, dropout_p=args.dropout, use_batchnorm=True )
 
 # Define the loss function (hinge loss)
-criterion = nn.HingeEmbeddingLoss(margin=1)
+criterion = nn.HingeEmbeddingLoss(margin=args.margin)
 
 # Define the optimizer (Stochastic Gradient Descent) with L2 regularization
 optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
