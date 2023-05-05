@@ -30,7 +30,7 @@ model = models.MLP( num_layers=args.num_layers, layer_size = args.hidden_size, i
 criterion = nn.HingeEmbeddingLoss(margin=args.margin)
 
 # Define the optimizer (Stochastic Gradient Descent) with L2 regularization
-optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
 # Create the data loaders
 train_dataset = datasets.Ball( args.train_size, args.input_size  )
