@@ -1,5 +1,4 @@
 import torch
-
 import torch.nn as nn
 
 class MLP(nn.Module):
@@ -30,4 +29,4 @@ class MLP(nn.Module):
     def forward(self, x):
         for layer in self.layers:
             x = layer(x)
-        return x
+        return torch.tanh(x)
