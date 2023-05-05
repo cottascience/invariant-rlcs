@@ -11,7 +11,7 @@ import datasets
 parser = argparse.ArgumentParser(description='experiments for randomized linear classifiers')
 parser.add_argument('--input_size', type=int, default=8, help='dimension of input')
 parser.add_argument('--hidden_size', type=int, default=16, help='number of hidden units in each layer in the MLP')
-parser.add_argument('--layer_size', type=int, default=2, help='number of hidden layers in the MLP')
+parser.add_argument('--num_layers', type=int, default=2, help='number of hidden layers in the MLP')
 parser.add_argument('--train_size', type=int, default=10000, help='number of training examples')
 parser.add_argument('--test_size', type=int, default=1000, help='number of testing examples')
 parser.add_argument('--lr', type=float, default=0.1, help='initial learning rate for the optimizer')
@@ -23,7 +23,7 @@ args = parser.parse_args()
 
 
 # Init the model
-model = models.MLP( num_layers=args.layer_size, input_size=args.input_size, output_size=1, dropout_p=args.dropout, use_batchnorm=True )
+model = models.MLP( num_layers=args.num_layers, layer_size = args.hidden_size, input_size=args.input_size, output_size=1, dropout_p=args.dropout, use_batchnorm=True )
 
 # Define the loss function (hinge loss)
 criterion = nn.HingeEmbeddingLoss()
