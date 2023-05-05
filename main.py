@@ -53,7 +53,7 @@ def accuracy( model, loader ):
         print("---")
         print(y)
         print("$$$")
-        print(correct)
+        print(y_hat == y)
     model.train()
     return correct/total
 
