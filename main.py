@@ -42,11 +42,13 @@ train_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size)
 test_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size)
 
 def accuracy( model, loader ):
-    acc = 0
+    correct = 0
+    total = 0
     for x,y in loader:
         y_hat = torch.sign(model(x))
-        acc += int((y_hat == y).sum())
-    return acc/len(loader)
+        correct += int((y_hat == y).sum())
+        total += x.shape[0]
+    return correct/total
 
 # Train the MLP model
 for epoch in range(args.epochs):
