@@ -16,8 +16,11 @@ class Parity(Dataset):
 
 class Ball(Dataset):
      # Constructor
-     def __init__(self, n, d, R=0.5, L=1):
-         self.x = (torch.rand(n, d) - 0.5) * L
+     def __init__(self, n,d):
+         self.R = 0.5
+         beta = torch.distributions.Beta(torch.tensor([2]), torch.tensor([2]))
+         normal = torch.distributions.Normal(0, 1)
+         self.x = beta.rsample([n]) *  normal.rsample([n,d])
          self.y = 2*(torch.tensor((torch.norm(self.x,dim=1) < R), dtype=float)).unsqueeze(1) - 1
          self.len = n
      # Getting the data
