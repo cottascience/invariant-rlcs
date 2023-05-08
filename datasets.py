@@ -1,5 +1,6 @@
-import torch
+import torch, math
 from torch.utils.data import Dataset
+
 
 class Parity(Dataset):
     # Constructor
@@ -17,7 +18,7 @@ class Parity(Dataset):
 class Ball(Dataset):
      # Constructor
      def __init__(self, n,d):
-         self.R = 0.5
+         self.R = 0.5*( math.sqrt(d) )
          beta = torch.distributions.Beta(torch.tensor([2.]), torch.tensor([2.]))
          normal = torch.distributions.Normal(0., 1.)
          self.x = beta.rsample([n]) *  normal.rsample([n,d])
