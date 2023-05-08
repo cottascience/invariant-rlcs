@@ -22,7 +22,7 @@ class Sort(Dataset):
          mean = 100.
          scale = 10.
          normal = torch.distributions.Normal(0, 2*math.sqrt(scale))
-         self.R = mean if d % 2 == 1  else torch.norm( normal.rsample([d//2])).item()
+         self.R = mean if d % 2 == 1  else torch.norm( normal.rsample([d//2]), p=1).item()
          normal = torch.distributions.Normal(mean, scale)
          self.x = normal.rsample( [n,d ]  )
          sorted_x, _ = torch.sort(self.x, dim=1, descending=True)
