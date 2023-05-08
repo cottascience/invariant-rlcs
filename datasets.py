@@ -15,6 +15,26 @@ class Parity(Dataset):
     def __len__(self):
         return self.len
 
+
+class Sort(Dataset):
+     # Constructor
+     def __init__(self, n, d):
+         self.R = 100.
+         normal = torch.distributions.Normal(100., 10.)
+         self.x = normal.rsample( [n,d ]  )
+         sorted_x, _ = torch.sort(self.x, dim=1, descending=True)
+         b = 0 if d % 2 == 1  else - 1
+         w = torch.pow(-torch.ones(d), torch.arange(d)+2)
+         f = (sorted_x @ w) - b
+         self.y = 2*(torch.tensor(( f < self.R), dtype=float)).unsqueeze(1) - 1
+         self.len = n
+     # Getting the data
+     def __getitem__(self, index):
+         return self.x[index], self.y[index]
+     # Getting length of the data
+     def __len__(self):
+         return self.len
+
 class Ball(Dataset):
      # Constructor
      def __init__(self, n,d):
@@ -23,8 +43,6 @@ class Ball(Dataset):
          normal = torch.distributions.Normal(0., 1.)
          self.x = beta.rsample([n]) *  normal.rsample([n,d])
          self.y = 2*(torch.tensor((torch.norm(self.x,dim=1) < self.R), dtype=float)).unsqueeze(1) - 1
-         print((self.y+1).sum()/(2*n))
-         exit()
          self.len = n
      # Getting the data
      def __getitem__(self, index):
