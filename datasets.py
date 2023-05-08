@@ -19,8 +19,8 @@ class Parity(Dataset):
 class Sort(Dataset):
      # Constructor
      def __init__(self, n, d):
-         mean = 100.
-         scale = 10.
+         mean = 0.
+         scale = 5.
          normal = torch.distributions.Normal(mean, scale)
 
          b = 0 if d % 2 == 1  else -1
