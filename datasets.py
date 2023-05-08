@@ -21,14 +21,17 @@ class Sort(Dataset):
      def __init__(self, n, d):
          mean = 100.
          scale = 10.
-         normal = torch.distributions.Normal(0, math.log(scale))
-         self.R = mean if d % 2 == 1  else torch.norm( normal.rsample([d//2]), p=1).item()
          normal = torch.distributions.Normal(mean, scale)
-         self.x = normal.rsample( [n,d ]  )
-         sorted_x, _ = torch.sort(self.x, dim=1, descending=True)
+
          b = 0 if d % 2 == 1  else -1
          w = torch.pow(-torch.ones(d), torch.arange(d)+2)
+
+         self.R = (torch.sort( normal.rsample( [1,d ] )  , dim=1, descending=True) @ w) - b
+
+         self.x = normal.rsample( [n,d ]  )
+         sorted_x, _ = torch.sort(self.x, dim=1, descending=True)
          f = (sorted_x @ w) - b
+
          self.y = 2*(torch.tensor(( f < self.R), dtype=float)).unsqueeze(1) - 1
          self.len = n
          self.f = f
