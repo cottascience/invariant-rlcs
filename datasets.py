@@ -20,7 +20,7 @@ class Sort(Dataset):
      # Constructor
      def __init__(self, n, d):
          mean = 0.
-         scale = 5.
+         scale = 1.
          normal = torch.distributions.Normal(mean, scale)
 
          b = 0 if d % 2 == 1  else -1
