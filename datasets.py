@@ -19,7 +19,7 @@ class Parity(Dataset):
 class Sort(Dataset):
      # Constructor
      def __init__(self, n, d):
-         self.R = 100. if d % 2 == 1  else  max([math.log(d,10)*10 , 10])
+         self.R = 100. if d % 2 == 1  else 2*math.sqrt(20*math.log(d))
          normal = torch.distributions.Normal(100., 10.)
          self.x = normal.rsample( [n,d ]  )
          sorted_x, _ = torch.sort(self.x, dim=1, descending=True)
@@ -29,7 +29,6 @@ class Sort(Dataset):
          self.y = 2*(torch.tensor(( f < self.R), dtype=float)).unsqueeze(1) - 1
          self.len = n
          self.f = f
-         print(sorted_x)
          print( torch.sum((self.y + 1)/2)/n )
      # Getting the data
      def __getitem__(self, index):
