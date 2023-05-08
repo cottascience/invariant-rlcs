@@ -21,7 +21,8 @@ class Sort(Dataset):
      def __init__(self, n, d):
          mean = 100.
          scale = 10.
-         self.R = mean if d % 2 == 1  else mean - 2*d*math.sqrt(2*scale*math.log(d))
+         normal = torch.distributions.Normal(0, math.sqrt(scale*2))
+         self.R = mean if d % 2 == 1  else torch.abs( normal.rsample([d])  ).sum().item()
          normal = torch.distributions.Normal(mean, scale)
          self.x = normal.rsample( [n,d ]  )
          sorted_x, _ = torch.sort(self.x, dim=1, descending=True)
