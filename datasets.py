@@ -22,6 +22,8 @@ class Ball(Dataset):
          normal = torch.distributions.Normal(0, 1)
          self.x = beta.rsample([n]) *  normal.rsample([n,d])
          self.y = 2*(torch.tensor((torch.norm(self.x,dim=1) < R), dtype=float)).unsqueeze(1) - 1
+         print((self.y+1).sum()/(2*n))
+         exit()
          self.len = n
      # Getting the data
      def __getitem__(self, index):
