@@ -29,6 +29,7 @@ class Sort(Dataset):
          self.y = 2*(torch.tensor(( f < self.R), dtype=float)).unsqueeze(1) - 1
          self.len = n
          self.f = f
+         print(sorted_x)
          print( torch.sum((self.y + 1)/2)/n )
      # Getting the data
      def __getitem__(self, index):
