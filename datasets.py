@@ -26,7 +26,7 @@ class Sort(Dataset):
          b = 0 if d % 2 == 1  else -1
          w = torch.pow(-torch.ones(d), torch.arange(d)+2)
 
-         self.R = 0 if d%2 == 1 else math.log(d)//2
+         self.R = 0 if d%2 == 1 else round(math.log(d)/2)
 
          self.x = normal.rsample( [n,d ]  )
          sorted_x, _ = torch.sort(self.x, dim=1, descending=True)
