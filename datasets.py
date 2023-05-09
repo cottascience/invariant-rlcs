@@ -34,7 +34,7 @@ class Connectivity(Dataset):
                 y.append(-1)
             graphs.append( Data(edge_index=edge_index, x = torch.ones((d,1)), v=v  ) )
         self.y = torch.tensor(y).unsqueeze(1)
-        print('Proportion in classes:\t' torch.sum((self.y + 1)/2)/n )
+        print('Proportion in classes:\t', torch.sum((self.y + 1)/2)/n )
         exit()
         self.x = torch.randint(low=0, high=2, size=(n,d), dtype=torch.float32)
         self.y = torch.pow(-1,torch.sum(self.x, dim=1)).unsqueeze(1)
@@ -66,7 +66,7 @@ class Sort(Dataset):
          self.y = 2*(torch.tensor(( f < self.R), dtype=float)).unsqueeze(1) - 1
          self.len = n
          self.f = f
-         print('Proportion in classes:\t' torch.sum((self.y + 1)/2)/n )
+         print('Proportion in classes:\t', torch.sum((self.y + 1)/2)/n )
      # Getting the data
      def __getitem__(self, index):
          return self.x[index], self.y[index]
