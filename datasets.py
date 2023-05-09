@@ -3,6 +3,7 @@ from torch.utils.data import Dataset
 from torch_geometric.utils.random import erdos_renyi_graph
 from torch_geometric.utils.sparse import to_torch_coo_tensor
 from torch_geometric.data import Data
+import networkx as nx
 
 class Parity(Dataset):
     # Constructor
@@ -22,12 +23,19 @@ class Connectivity(Dataset):
     def __init__(self, n, d):
         p = .5
         graphs = []
+        y = []
         for i in range(n):
             edge_index = erdos_renyi_graph(d,p)
             v = to_torch_coo_tensor(edge_index).to_dense().view(d*d)
-            graph = Data(edge_index=edge_index, x = torch.ones((d,1)), v=v  )
-            print(A)
-            exit()
+            G = to_networkx( Data(edge_index=edge_index, x = torch.ones((d,1)), v=v  )  )
+            if nx.is_connected(G):
+                y.append(1)
+            else:
+                y.append(-1)
+            graphs.append( Data(edge_index=edge_index, x = torch.ones((d,1)), v=v  ) )
+        self.y = torch.tensor(y).unsqueeze(1)
+        print('Proportion in classes\t': torch.sum((self.y + 1)/2)/n )
+        exit()
         self.x = torch.randint(low=0, high=2, size=(n,d), dtype=torch.float32)
         self.y = torch.pow(-1,torch.sum(self.x, dim=1)).unsqueeze(1)
         self.len = n
@@ -58,7 +66,7 @@ class Sort(Dataset):
          self.y = 2*(torch.tensor(( f < self.R), dtype=float)).unsqueeze(1) - 1
          self.len = n
          self.f = f
-         print( torch.sum((self.y + 1)/2)/n )
+         print('Proportion in classes\t': torch.sum((self.y + 1)/2)/n )
      # Getting the data
      def __getitem__(self, index):
          return self.x[index], self.y[index]
