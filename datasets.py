@@ -37,9 +37,7 @@ class Connectivity(Dataset):
             graphs.append( Data(edge_index=edge_index, x = torch.ones((d,1)), v=v  ) )
         self.y = torch.tensor(y).unsqueeze(1)
         print('Proportion in classes:\t', torch.sum((self.y + 1)/2)/n )
-        exit()
-        self.x = torch.randint(low=0, high=2, size=(n,d), dtype=torch.float32)
-        self.y = torch.pow(-1,torch.sum(self.x, dim=1)).unsqueeze(1)
+        self.x = graphs
         self.len = n
     # Getting the data
     def __getitem__(self, index):
