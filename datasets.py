@@ -41,6 +41,7 @@ class Connectivity(Dataset):
         self.len = n
         B = Batch().from_data_list(self.x)
         print(B)
+        print(torch.tensor(graphs))
     # Getting the data
     def __getitem__(self, index):
         return self.x[index], self.y[index]
