@@ -39,12 +39,9 @@ class Connectivity(Dataset):
         print('Proportion in classes:\t', torch.sum((self.y + 1)/2)/n )
         self.x = graphs
         self.len = n
-        B = Batch().from_data_list(self.x)
-        print(B)
-        print(torch.tensor(graphs))
     # Getting the data
     def __getitem__(self, index):
-        return self.x[index], self.y[index]
+        return Batch().from_data_list( [ self.x[i] for i in index ] ), self.y[index]
     # Getting length of the data
     def __len__(self):
         return self.len
