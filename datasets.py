@@ -2,6 +2,7 @@ import torch, math
 from torch.utils.data import Dataset
 from torch_geometric.utils.random import erdos_renyi_graph
 from torch_geometric.utils.sparse import to_torch_coo_tensor
+from torch_geometric.data import Data
 
 class Parity(Dataset):
     # Constructor
@@ -23,10 +24,10 @@ class Connectivity(Dataset):
         graphs = []
         for i in range(n):
             edge_index = erdos_renyi_graph(d,p)
-            A = to_torch_coo_tensor(edge_index).to_dense()
+            v = to_torch_coo_tensor(edge_index).to_dense().view(n*n)
+            graph = Data(edge_index=edge_index, x = torch.ones((n,1)), v=v  )
             print(A)
             exit()
-
         self.x = torch.randint(low=0, high=2, size=(n,d), dtype=torch.float32)
         self.y = torch.pow(-1,torch.sum(self.x, dim=1)).unsqueeze(1)
         self.len = n
