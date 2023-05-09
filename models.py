@@ -8,7 +8,7 @@ def dot( x, a ):
 
 class RLC(torch.nn.Module):
      def __init__(self, noise_size, hidden_size, num_layers, dropout_p, use_batchnorm, x_size):
-         super(RLC).__init__()
+         super(RLC, self).__init__()
 
          norm = 'batch_norm' if use_batchnorm else None
          self.mlp = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = x_size+1,
@@ -23,7 +23,7 @@ class RLC(torch.nn.Module):
 
 class GIN(torch.nn.Module):
     def __init__(self, in_channels, hidden_channels, out_channels, num_layers):
-        super(GIN).__init__()
+        super(GIN, self).__init__()
 
         self.convs = torch.nn.ModuleList()
         for _ in range(num_layers):
