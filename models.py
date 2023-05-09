@@ -7,10 +7,10 @@ def dot( x, a ):
     return torch.bmm(x.view(x.shape[0], 1, x.shape[1]), a.view(a.shape[0], a.shape[1], 1)).reshape(x.shape[0])
 
 class RLC(torch.nn.Module):
-     def __init__(self, noise_size, hidden_size, num_layers, dropout_p, use_batch_norm, x_size):
+     def __init__(self, noise_size, hidden_size, num_layers, dropout_p, use_batchnorm, x_size):
          super(RLC).__init__()
 
-         norm = 'batch_norm' if use_batch_norm else None
+         norm = 'batch_norm' if use_batchnorm else None
          self.mlp = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = x_size+1,
                         num_layers=num_layers, norm=norm, dropout=dropout_p)
          self.noise_size = noise_size
