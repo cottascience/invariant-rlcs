@@ -1,7 +1,7 @@
 import torch, math
 from torch.utils.data import Dataset
 from torch_geometric.utils.random import erdos_renyi_graph
-from torch_geometric.utils.sparse import to_torch_sparse_tensor
+from torch_geometric.utils.sparse import to_torch_coo_tensor
 
 class Parity(Dataset):
     # Constructor
@@ -23,7 +23,7 @@ class Connectivity(Dataset):
         graphs = []
         for i in range(n):
             edge_index = erdos_renyi_graph(d,p)
-            A = to_torch_sparse_tensor(edge_index).to_dense()
+            A = to_torch_coo_tensor(edge_index).to_dense()
             print(A)
             exit()
 
