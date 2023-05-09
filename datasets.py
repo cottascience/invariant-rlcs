@@ -24,8 +24,8 @@ class Connectivity(Dataset):
         graphs = []
         for i in range(n):
             edge_index = erdos_renyi_graph(d,p)
-            v = to_torch_coo_tensor(edge_index).to_dense().view(n*n)
-            graph = Data(edge_index=edge_index, x = torch.ones((n,1)), v=v  )
+            v = to_torch_coo_tensor(edge_index).to_dense().view(d*d)
+            graph = Data(edge_index=edge_index, x = torch.ones((d,1)), v=v  )
             print(A)
             exit()
         self.x = torch.randint(low=0, high=2, size=(n,d), dtype=torch.float32)
