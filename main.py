@@ -20,13 +20,16 @@ parser.add_argument('--epochs', type=int, default=1000, help='number of epochs t
 parser.add_argument('--batch_size', type=int, default=64, help='mini-batch size for training')
 parser.add_argument('--dropout', type=float, default=0.0, help='dropout probability for the MLP')
 parser.add_argument('--weight_decay', type=float, default=0.00, help='weight decay for L2 regularization')
+parser.add_argument('--m', type=int, default=1, help='number of samples used in RLCs for train/eval')
+parser.add_argument('--noise_size', type=int, default=1, help='number of noise variables in RLCs')
 parser.add_argument('--model', choices=['mlp', 'gnn', 'rlc', 'rlc_set', 'rlc_graph', 'rlc_sphere'], default='mlp')
 parser.add_argument('--dataset', choices=['ball', 'parity', 'sort', 'connectivity'], default='ball')
 args = parser.parse_args()
 print(args)
 # Init the model
-
 model = models.MLP( num_layers=args.num_layers, layer_size = args.hidden_size, input_size=args.input_size, output_size=1, dropout_p=args.dropout, use_batchnorm=True )
+model = models.GIN( in_channels=args.input_size, hidden_channels=args.hidden_size, out_channels=1, num_layers=args.num_layers, use_batchnorm=True  )
+model = models.RLC( noise_size=args.noise_size, hidden_size=args.hidden_size, num_layers=args.num_layers, dropout_p=args.dropout, use_batch_norm=True, x_size=args.input_size )
 exit()
 
 # Define the loss function (hinge loss)
