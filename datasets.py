@@ -23,13 +23,13 @@ class Parity(Dataset):
 class Connectivity(Dataset):
     # Constructor
     def __init__(self, n, d):
-        p = .5
+        p = math.log(n)/n
         graphs = []
         y = []
         for i in range(n):
             edge_index = erdos_renyi_graph(d,p)
             v = to_torch_coo_tensor(edge_index).to_dense().view(d*d)
-            G = to_networkx( Data(edge_index=edge_index, x = torch.ones((d,1)), v=v  ), to_undirected=True)
+            G = to_networkx( Data(edge_index=edge_index, x = torch.ones((d,1)), v=v  ), to_undirected=True  )
             if nx.is_connected(G):
                 y.append(1)
             else:
