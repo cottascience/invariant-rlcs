@@ -2,7 +2,7 @@ import torch, math
 from torch.utils.data import Dataset
 from torch_geometric.utils.random import erdos_renyi_graph
 from torch_geometric.utils.sparse import to_torch_coo_tensor
-from torch_geometric.data import Data
+from torch_geometric.data import Data, Batch
 from torch_geometric.utils.convert import to_networkx
 import networkx as nx
 
@@ -39,6 +39,8 @@ class Connectivity(Dataset):
         print('Proportion in classes:\t', torch.sum((self.y + 1)/2)/n )
         self.x = graphs
         self.len = n
+        B = Batch().from_data_list(self.x)
+        print(B)
     # Getting the data
     def __getitem__(self, index):
         return self.x[index], self.y[index]
