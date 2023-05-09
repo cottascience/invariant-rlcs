@@ -6,7 +6,6 @@ from torch_geometric.data import Data, Batch
 from torch_geometric.utils.convert import to_networkx
 import networkx as nx
 
-
 class Parity(Dataset):
     # Constructor
     def __init__(self, n, d):

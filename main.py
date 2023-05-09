@@ -20,7 +20,7 @@ parser.add_argument('--epochs', type=int, default=1000, help='number of epochs t
 parser.add_argument('--batch_size', type=int, default=64, help='mini-batch size for training')
 parser.add_argument('--dropout', type=float, default=0.0, help='dropout probability for the MLP')
 parser.add_argument('--weight_decay', type=float, default=0.00, help='weight decay for L2 regularization')
-parser.add_argument('--m', type=int, default=1, help='number of samples used in RLCs for train/eval')
+parser.add_argument('--m', type=int, default=1, help='number of samples used in RLCs for eval')
 parser.add_argument('--noise_size', type=int, default=1, help='number of noise variables in RLCs')
 parser.add_argument('--model', choices=['mlp', 'gnn', 'rlc', 'rlc_set', 'rlc_graph', 'rlc_sphere'], default='mlp')
 parser.add_argument('--dataset', choices=['ball', 'parity', 'sort', 'connectivity'], default='ball')
@@ -30,7 +30,6 @@ print(args)
 model = models.MLP( num_layers=args.num_layers, layer_size = args.hidden_size, input_size=args.input_size, output_size=1, dropout_p=args.dropout, use_batchnorm=True )
 model = models.GIN( in_channels=args.input_size, hidden_channels=args.hidden_size, out_channels=1, num_layers=args.num_layers  )
 model = models.RLC( noise_size=args.noise_size, hidden_size=args.hidden_size, num_layers=args.num_layers, dropout_p=args.dropout, use_batchnorm=True, x_size=args.input_size )
-exit()
 
 # Define the loss function (hinge loss)
 # criterion = nn.HingeEmbeddingLoss(margin=args.margin)
@@ -40,16 +39,21 @@ criterion = nn.SoftMarginLoss()
 optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
 # Create the data loaders
-train_dataset = datasets.Ball( args.train_size, args.input_size  )
-test_dataset = datasets.Ball( args.test_size, args.input_size  )
+datasets = { 'ball': datasets.Ball, 'parity': datasets.Parity , 'sort': datasets.Sort , 'connectivity': datasets.Connectivity  }
+train_dataset = datasets[args.dataset]( args.train_size, args.input_size  )
+test_dataset = datasets[args.dataset]( args.test_size, args.input_size  )
 train_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size)
 test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
+exit()
 
 def accuracy( model, loader ):
     model.eval()
     correct = 0
     for x,y in loader:
-        y_hat = torch.sign(model(x))
+        y_hat = torch.zeros_like(y)
+        for _ in range(args.m):
+            y_hat += torch.sign(model(x))
+        y_hat = torch.sign(y_hat)
         correct += torch.sum(y_hat == y)
     model.train()
     return correct/args.train_size
