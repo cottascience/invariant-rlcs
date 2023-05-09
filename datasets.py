@@ -1,7 +1,7 @@
 import torch, math
 from torch.utils.data import Dataset
 from torch_geometric.utils.random import erdos_renyi_graph
-from torch_geometric.utils import to_torch_sparse_tensor
+from torch_geometric.utils.sparse import to_torch_sparse_tensor
 
 class Parity(Dataset):
     # Constructor
