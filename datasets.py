@@ -3,7 +3,9 @@ from torch.utils.data import Dataset
 from torch_geometric.utils.random import erdos_renyi_graph
 from torch_geometric.utils.sparse import to_torch_coo_tensor
 from torch_geometric.data import Data
+from torch_geometric.utils.convert import to_networkx
 import networkx as nx
+
 
 class Parity(Dataset):
     # Constructor
