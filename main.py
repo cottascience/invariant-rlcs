@@ -83,7 +83,8 @@ for epoch in range(args.epochs):
             weights /= args.k
         weights = weights.detach()
         y_hat = model(x)
-        loss = criterion(-weights*y_hat, y)
+        weights = -1*weights -1
+        loss = criterion(weights*y_hat, y)
         loss.backward()
         optimizer.step()
         epoch_loss += loss.item()*x.shape[0]
