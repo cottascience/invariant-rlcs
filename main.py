@@ -49,6 +49,8 @@ optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max = args.epochs)
 
 # Create the data loaders
+torch.manual_seed(1234)
+torch.cuda.manual_seed(1234)
 datasets = { 'ball': datasets.Ball, 'parity': datasets.Parity , 'sort': datasets.Sort , 'connectivity': datasets.Connectivity  }
 print('Creating training data')
 train_dataset = datasets[args.dataset]( args.train_size, args.input_size  )
