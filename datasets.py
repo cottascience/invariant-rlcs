@@ -88,6 +88,7 @@ class Ball(Dataset):
          beta = torch.distributions.Beta(torch.tensor([2.]), torch.tensor([2.]))
          normal = torch.distributions.Normal(0., 1.)
          self.x = beta.rsample([n]) *  normal.rsample([n,d])
+         self.x = torch.rand(n) *  normal.rsample([n,d])
          self.y = 2*(torch.tensor((torch.norm(self.x,dim=1) < self.R), dtype=float)).unsqueeze(1) - 1
          self.len = n
          print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
