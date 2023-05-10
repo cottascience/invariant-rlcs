@@ -16,15 +16,8 @@ class RLC(torch.nn.Module):
                         num_layers=num_layers, norm=norm, dropout=dropout_p)
          self.noise_size = noise_size
 
-     def _init_weights(self, module):
-         if isinstance(module, nn.Linear):
-             print("a")
-             module.weight.data.normal_(mean=0.0, std=1.0)
-             if module.bias is not None:
-                 module.bias.data.zero_()
-
      def forward(self, x):
-        noise = torch.rand(( x.shape[0], self.noise_size )).to(x.device)
+        noise = torch.rand(( x.shape[0], self.noise_size )).to(x.device) - .5
         out = self.mlp( noise  )
         a = out[:,:-1]
         b = out[:,-1].unsqueeze(1)
