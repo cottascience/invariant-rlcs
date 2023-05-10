@@ -17,10 +17,10 @@ class RLC(torch.nn.Module):
          self.noise_size = noise_size
 
      def forward(self, x):
-        noise = torch.rand(( x.shape[0], self.noise_size )).to(x.device) - .5
+        #noise = torch.rand(( x.shape[0], self.noise_size )).to(x.device) - .5
+        normal = torch.distributions.Normal(0, 1)
+        noise = normal.rsample([x.shape[0], self.noise_size])
         out = self.mlp( noise )
-        print(out,x)
-        print('wwwwwww')
         a = out[:,:-1]
         b = out[:,-1].unsqueeze(1)
         return dot(x,a) - b
