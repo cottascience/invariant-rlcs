@@ -57,8 +57,8 @@ class RSphereC(torch.nn.Module):
          sigma = self.sigma_layer_norm(sigma)
          #b = self.b_layer_norm(b)
          a = sigma * self.normal.rsample( x.shape  ).to(x.device)
-         print(a, b)
-         print('---')
+         #print(a, b)
+         #print('---')
          return F.tanh(dot(x,self.c1*a) - self.c2*b)
 
 class GIN(torch.nn.Module):
