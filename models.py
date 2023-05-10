@@ -12,8 +12,9 @@ class RLC(torch.nn.Module):
          super(RLC, self).__init__()
 
          norm = 'batch_norm' if use_batchnorm else None
+         self.act = nn.LeakyReLU()
          self.mlp = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = x_size+1,
-                        num_layers=num_layers, norm=norm, dropout=dropout_p)
+                        num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
          self.noise_size = noise_size
          self.normal = torch.distributions.Normal(0,1)
          self.sigma = torch.nn.Parameter(torch.ones(1))
