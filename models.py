@@ -20,12 +20,10 @@ class RLC(torch.nn.Module):
          self.mu = torch.nn.Parameter(torch.zeros(1)+.01)
          self.c1 = torch.nn.Parameter(torch.ones(1))
          self.c2 = torch.nn.Parameter(torch.ones(1))
-         self.layer_norm = nn.LayerNorm(x_size+1)
      def forward(self, x):
         noise = self.normal.rsample([x.shape[0], self.noise_size]).to(x.device)
         noise = noise*self.sigma + self.mu
         out = self.mlp( noise )
-        #out = self.layer_norm(out)
         a = out[:,:-1]
         b = out[:,-1].unsqueeze(1)
         return F.tanh(dot(x,self.c1*a) - self.c2*b)
