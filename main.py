@@ -60,7 +60,7 @@ if args.model == 'gnn':
 
 def accuracy( model, loader ):
     model.eval()
-    correct = 0
+    correct, total = 0, 0
     for x,y in loader:
         if torch.cuda.is_available(): x,y = x.cuda(), y.cuda()
         y_hat = torch.zeros_like(y)
@@ -68,8 +68,9 @@ def accuracy( model, loader ):
             y_hat += torch.sign(model(x))
         y_hat = torch.sign(y_hat)
         correct += torch.sum(y_hat == y)
+        total += x.shape[0]
     model.train()
-    return correct/args.train_size
+    return correct/total
 
 # Train the MLP model
 for epoch in range(args.epochs):
