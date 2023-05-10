@@ -55,7 +55,7 @@ class RSphereC(torch.nn.Module):
          sigma = self.sigma_mlp( torch.cat([u,u_sigma],dim=1 ))
          b = self.b_mlp( torch.cat([u,u_b],dim=1))
          sigma = self.sigma_layer_norm(sigma)
-         b = self.b_layer_norm(b)
+         #b = self.b_layer_norm(b)
          a = sigma * self.normal.rsample( x.shape  ).to(x.device)
          print(a, b)
          print('---')
