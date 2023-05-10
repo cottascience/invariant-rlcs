@@ -41,7 +41,7 @@ if torch.cuda.is_available(): model = model.cuda()
 
 # Define the loss function (hinge loss)
 # criterion = nn.HingeEmbeddingLoss(margin=args.margin)
-criterion = nn.SoftMarginLoss()
+criterion = nn.SoftMarginLoss(reduction='none')
 
 # Define the optimizer (Stochastic Gradient Descent) with L2 regularization
 optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
@@ -79,6 +79,11 @@ for epoch in range(args.epochs):
         optimizer.zero_grad()
         y_hat = model(x)
         loss = criterion(y_hat, y)
+        weights = torch.zeros_like(y)
+        for _ in range(args.k):
+            weights += torch.sign(model(x))
+        weights /= args.k
+        loss = torch.mean(-weights*loss)
         loss.backward()
         optimizer.step()
         epoch_loss += loss.item()*x.shape[0]
