@@ -16,7 +16,7 @@ class RLC(torch.nn.Module):
          self.mlp = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = x_size+1,
                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
          self.noise_size = noise_size
-         self.normal = torch.distributions.Normal(0,1e-3)
+         self.normal = torch.distributions.Normal(0,1e-2)
          self.sigma = torch.nn.Parameter(torch.ones(1))
          self.mu = torch.nn.Parameter(torch.zeros(1)+.01)
          self.c1 = torch.nn.Parameter(torch.ones(1))
