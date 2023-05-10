@@ -13,12 +13,12 @@ class RLC(torch.nn.Module):
 
          norm = 'batch_norm' if use_batchnorm else None
          self.mlp = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = x_size+1,
-                        num_layers=num_layers, norm=norm, dropout=dropout_p)
+                        num_layers=num_layers, norm=norm, dropout=dropout_p, bias=False)
          self.noise_size = noise_size
      def forward(self, x):
          noise = torch.rand(( x.shape[0], self.noise_size )).to(x.device)
          out = self.mlp( noise  )
-         a = F.sigmoid(out[:,:-1])
+         a = out[:,:-1]
          b = out[:,-1].unsqueeze(1)
          return dot(x,a) - b
 
