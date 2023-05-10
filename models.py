@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from torch_geometric.nn import GINConv, global_add_pool
 from torch_geometric.nn import MLP as torch_geometric_MLP
 
@@ -17,7 +18,7 @@ class RLC(torch.nn.Module):
      def forward(self, x):
          noise = torch.rand(( x.shape[0], self.noise_size )).to(x.device)
          out = self.mlp( noise  )
-         out = torch.norm(out,p=2)
+         out = F.normalize(out,p=2,dim=0)
          a = out[:,:-1]
          b = out[:,-1].unsqueeze(1)
          return dot(x,a) - b
