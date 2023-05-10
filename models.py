@@ -19,6 +19,11 @@ class RLC(torch.nn.Module):
          out = self.mlp( noise  )
          a = out[:,:-1]
          b = out[:,-1].unsqueeze(1)
+         print(b.shape)
+         print(a.shape)
+         print(x.shape)
+         print( dot(x,a).shape  )
+         exit()
          return dot(x,a) - b
 
 class GIN(torch.nn.Module):
