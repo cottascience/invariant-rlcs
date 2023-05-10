@@ -28,7 +28,7 @@ class RLC(torch.nn.Module):
         out = self.layer_norm(out)
         a = out[:,:-1]
         b = out[:,-1].unsqueeze(1)
-        return dot(x,self.c1*a) - self.c2*b
+        return F.tanh(dot(x,self.c1*a) - self.c2*b)
 
 class GIN(torch.nn.Module):
     def __init__(self, in_channels, hidden_channels, out_channels, num_layers):
