@@ -1,11 +1,13 @@
 import argparse
 import torch
+import random
 from torch.utils.data import DataLoader
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 from torch.optim.lr_scheduler import CosineAnnealingLR
 import models
+import sys
 import datasets
 
 # Parse the hyperparameters
@@ -61,6 +63,9 @@ test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
 if args.model == 'gnn':
     train_dataset.use_graphs
     test_dataset.use_graphs
+seed = random.randint(0, sys.maxint)
+torch.manual_seed(seed)
+torch.cuda.manual_seed(seed)
 
 def accuracy( model, loader ):
     model.eval()
