@@ -29,7 +29,7 @@ class RLC(torch.nn.Module):
         #print(a,b,x)
         #print(self.c1, self.c2)
         a = F.normalize(a)
-        print(a, b, self.c1, self.c2)
+        #print(a, b, self.c1, self.c2)
         return F.tanh(dot(x,self.c1*a) - self.c2*b)
 
 
