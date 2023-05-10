@@ -84,10 +84,12 @@ class Sort(Dataset):
 class Ball(Dataset):
      # Constructor
      def __init__(self, n,d):
-         self.R = .5*( math.sqrt(d) )
-         beta = torch.distributions.Beta(torch.tensor([2.]), torch.tensor([2.]))
+         self.R = 1.
          normal = torch.distributions.Normal(0., 1.)
-         self.x = beta.rsample([n]) *  normal.rsample([n,d])
+         self.x = normal.rsample([n,d])
+         self.x /= self.x.norm(dim=1, keepdim=True)
+         normal = torch.distributions.Normal(0.,math.exp( math.sqrt(d)))
+         self.x += normal.rsample([n,d])
          self.y = 2*(torch.tensor((torch.norm(self.x,dim=1) < self.R), dtype=float)).unsqueeze(1) - 1
          self.len = n
          print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
