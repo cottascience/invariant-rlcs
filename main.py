@@ -37,6 +37,11 @@ if args.model == 'mlp': model = models.MLP( num_layers=args.num_layers, layer_si
 if args.model == 'gnn': models.GIN( in_channels=args.input_size, hidden_channels=args.hidden_size, out_channels=1, num_layers=args.num_layers  )
 if args.model == 'rlc': model = models.RLC( noise_size=args.noise_size, hidden_size=args.hidden_size, num_layers=args.num_layers, dropout_p=args.dropout, use_batchnorm=True, x_size=args.input_size )
 
+for name, param in model.named_parameters():
+    if 'weight' in name and 'linear' in name:
+        init.xavier_uniform_(param)
+        print('a')
+
 if torch.cuda.is_available(): model = model.cuda()
 
 # Define the loss function (hinge loss)
