@@ -18,8 +18,8 @@ class RLC(torch.nn.Module):
      def forward(self, x):
          noise = torch.rand(( x.shape[0], self.noise_size )).to(x.device)
          out = self.mlp( noise  )
-         out = F.normalize(out,p=2,dim=0)
          a = out[:,:-1]
+         a = F.normalize(a,p=2,dim=0)
          b = out[:,-1].unsqueeze(1)
          return dot(x,a) - b
 
