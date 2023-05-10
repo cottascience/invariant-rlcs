@@ -43,8 +43,8 @@ class RSphereC(torch.nn.Module):
                           num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
           self.noise_size = noise_size
           self.noise_dist = torch.distributions.Normal(0,1)
-          self.c1 = torch.nn.Parameter(torch.ones(1)*10)
-          self.c2 = torch.nn.Parameter(torch.ones(1)*10)
+          self.c1 = torch.nn.Parameter(torch.ones(1))
+          self.c2 = torch.nn.Parameter(torch.ones(1))
           self.normal = torch.distributions.Normal(0,1)
           self.sigma_layer_norm =  nn.LayerNorm(1)
           self.b_layer_norm =  nn.LayerNorm(1)
