@@ -26,7 +26,7 @@ class RLC(torch.nn.Module):
         out = self.layer_norm(out)
         a = out[:,:-1]
         b = out[:,-1].unsqueeze(1)
-        print(a,b,x)
+        #print(a,b,x)
         return F.tanh(dot(x,self.c1*a) - self.c2*b)
 
 
