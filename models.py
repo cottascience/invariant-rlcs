@@ -23,7 +23,7 @@ class RLC(torch.nn.Module):
      def forward(self, x):
         noise = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
         out = self.mlp( noise )
-        #out = self.layer_norm(out)
+        out = self.layer_norm(out)
         a = out[:,:-1]
         b = out[:,-1].unsqueeze(1)
         #print(a,b,x)
