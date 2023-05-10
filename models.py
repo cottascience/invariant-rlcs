@@ -15,9 +15,11 @@ class RLC(torch.nn.Module):
          self.mlp = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = x_size+1,
                         num_layers=num_layers, norm=norm, dropout=dropout_p)
          self.noise_size = noise_size
-         self.normal = torch.distributions.Normal(0,.01)
+         self.normal = torch.distributions.Normal(0,.1)
          self.sigma = torch.nn.Parameter(torch.ones(1))
          self.mu = torch.nn.Parameter(torch.zeros(1)+.01)
+         self.c1 = torch.nn.Parameter(torch.ones(1))
+         self.c2 = torch.nn.Parameter(torch.ones(1))
 
      def forward(self, x):
         noise = self.normal.rsample([x.shape[0], self.noise_size]).to(x.device)
@@ -25,7 +27,7 @@ class RLC(torch.nn.Module):
         out = self.mlp( noise )
         a = out[:,:-1]
         b = out[:,-1].unsqueeze(1)
-        return dot(x,a) - b
+        return dot(x,self.c1*a) - self.c2*b
 
 class GIN(torch.nn.Module):
     def __init__(self, in_channels, hidden_channels, out_channels, num_layers):
