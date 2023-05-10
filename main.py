@@ -79,7 +79,7 @@ for epoch in range(args.epochs):
         optimizer.zero_grad()
         y_hat = model(x)
         loss = criterion(y_hat, y)
-        weights = torch.zeros_like(y)
+        weights = torch.zeros_like(y) + 1e-6
         for _ in range(args.k):
             weights += torch.sign(model(x))
         weights /= args.k
