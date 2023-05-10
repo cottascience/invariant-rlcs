@@ -42,18 +42,22 @@ class RSphereC(torch.nn.Module):
           self.b_mlp = torch_geometric_MLP(in_channels = 2*noise_size, hidden_channels = hidden_size, out_channels = 1,
                           num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
           self.noise_size = noise_size
-          self.noise_dist = torch.distributions.Normal(0,.1)
-          self.c1 = torch.nn.Parameter(torch.ones(1))
-          self.c2 = torch.nn.Parameter(torch.ones(1))
+          self.noise_dist = torch.distributions.Normal(0,1)
+          self.c1 = torch.nn.Parameter(torch.ones(1)*10)
+          self.c2 = torch.nn.Parameter(torch.ones(1)*10)
           self.normal = torch.distributions.Normal(0,1)
+          self.sigma_layer_norm =  nn.LayerNorm(1)
+          self.b_layer_norm =  nn.LayerNorm(1)
       def forward(self, x):
          u = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
          u_sigma = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
          u_b = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
          sigma = self.sigma_mlp( torch.cat([u,u_sigma],dim=1 ))
          b = self.b_mlp( torch.cat([u,u_b],dim=1))
+         sigma = self.sigma_layer_norm(sigma)
+         b = self.b_layer_norm(b)
          a = sigma * self.normal.rsample( x.shape  ).to(x.device)
-         return F.tanh(dot(x,a) -b)
+         return F.tanh(dot(x,self.c1*a) - self.c2*b)
 
 class GIN(torch.nn.Module):
     def __init__(self, in_channels, hidden_channels, out_channels, num_layers):
