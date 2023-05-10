@@ -27,7 +27,8 @@ parser.add_argument('--model', choices=['mlp', 'gnn', 'rlc', 'rlc_set', 'rlc_gra
 parser.add_argument('--dataset', choices=['ball', 'parity', 'sort', 'connectivity'], default='ball')
 args = parser.parse_args()
 # python main.py --dataset ball --model mlp
-# python main.py --dataset ball --model rlc
+# python main.py --dataset ball --model rlc --batch_size 1000 --lr 0.5
+
 
 print('---Settings being used---')
 print(args)
@@ -68,6 +69,7 @@ def accuracy( model, loader ):
         for _ in range(args.m):
             y_hat += torch.sign(model(x))
         y_hat = torch.sign(y_hat)
+        print( (y_hat > 0).sum()/len(y_hat) )
         correct += torch.sum(y_hat == y)
         total += x.shape[0]
     model.train()
