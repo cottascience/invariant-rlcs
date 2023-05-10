@@ -76,10 +76,8 @@ for epoch in range(args.epochs):
     epoch_loss, epoch_size  = 0, 0
     for x,y in train_loader:
         if torch.cuda.is_available(): x,y = x.cuda(), y.cuda()
-        x = x.repeat(args.k, 1)
-        y = y.repeat(args.k, 1)
         optimizer.zero_grad()
-        y_hat = model(x)
+        y_hat = torch.sign(model(x))
         loss = criterion(y_hat, y)
         loss.backward()
         optimizer.step()
