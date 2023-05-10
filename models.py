@@ -4,7 +4,7 @@ from torch_geometric.nn import GINConv, global_add_pool
 from torch_geometric.nn import MLP as torch_geometric_MLP
 
 def dot( x, a ):
-    return torch.bmm(x.view(x.shape[0], 1, x.shape[1]), a.view(a.shape[0], a.shape[1], 1)).reshape(x.shape[0])
+    return torch.bmm(x.view(x.shape[0], 1, x.shape[1]), a.view(a.shape[0], a.shape[1], 1)).reshape(x.shape[0],1)
 
 class RLC(torch.nn.Module):
      def __init__(self, noise_size, hidden_size, num_layers, dropout_p, use_batchnorm, x_size):
@@ -19,11 +19,6 @@ class RLC(torch.nn.Module):
          out = self.mlp( noise  )
          a = out[:,:-1]
          b = out[:,-1].unsqueeze(1)
-         print(b.shape)
-         print(a.shape)
-         print(x.shape)
-         print( dot(x,a).shape  )
-         exit()
          return dot(x,a) - b
 
 class GIN(torch.nn.Module):
