@@ -48,7 +48,7 @@ class RSphereC(torch.nn.Module):
          u_b = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
          sigma = self.sigma_mlp( torch.cat([u,u_sigma],dim=1 ))
          b = self.b_mlp( torch.cat([u,u_b],dim=1))
-         a = sigma.sigmoid() * self.normal.rsample( x.shape  ).to(x.device)
+         a = sigma * self.normal.rsample( x.shape  ).to(x.device)
          return F.tanh(dot(x,self.c1*a) - self.c2*b)
 
 class GIN(torch.nn.Module):
