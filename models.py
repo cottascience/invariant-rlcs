@@ -57,8 +57,8 @@ class RSetC(torch.nn.Module):
                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
          self.noise_size = noise_size
          self.noise_dist = torch.distributions.Uniform(0,1)
-         self.c1 = torch.nn.Parameter(torch.ones(1)*1)
-         self.c2 = torch.nn.Parameter(torch.ones(1)*1)
+         self.c1 = torch.nn.Parameter(torch.ones(1)*0.1)
+         self.c2 = torch.nn.Parameter(torch.ones(1)*0.1)
          self.layer_norm =  nn.LayerNorm(x_size+1)
 
      def forward(self, x):
@@ -74,7 +74,6 @@ class RSetC(torch.nn.Module):
         a = out[:,:-1]
         b = out[:,-1].unsqueeze(1)
         res = dot(x,self.c1*a) - self.c2*b
-        print(self.c1, self.c2)
         return torch.tanh(res)
 
 class RSphereC(torch.nn.Module):
