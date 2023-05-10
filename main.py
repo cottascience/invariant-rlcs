@@ -45,6 +45,7 @@ criterion = nn.SoftMarginLoss()
 
 # Define the optimizer (Stochastic Gradient Descent) with L2 regularization
 optimizer = optim.Adagrad(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max = args.epochs)
 
 # Create the data loaders
 datasets = { 'ball': datasets.Ball, 'parity': datasets.Parity , 'sort': datasets.Sort , 'connectivity': datasets.Connectivity  }
@@ -85,4 +86,5 @@ for epoch in range(args.epochs):
         optimizer.step()
         epoch_loss += loss.item()*x.shape[0]
         epoch_size += x.shape[0]
-    print(epoch, '==\t Loss:\t', epoch_loss/epoch_size, 'Train acc:\t', accuracy(model, train_loader).item(), 'Test acc:\t', accuracy(model, test_loader).item())
+    scheduler.step()
+    print(epoch, '==\t Loss:\t', epoch_loss/epoch_size, 'LR:\t',scheduler.get_lr(),'Train acc:\t', accuracy(model, train_loader).item(), 'Test acc:\t', accuracy(model, test_loader).item())
