@@ -21,6 +21,7 @@ parser.add_argument('--batch_size', type=int, default=64, help='mini-batch size 
 parser.add_argument('--dropout', type=float, default=0.0, help='dropout probability for the MLP')
 parser.add_argument('--weight_decay', type=float, default=0.00, help='weight decay for L2 regularization')
 parser.add_argument('--m', type=int, default=1, help='number of samples used in RLCs for eval')
+parser.add_argument('--k', type=int, default=1, help='number of samples used in RLCs for train')
 parser.add_argument('--noise_size', type=int, default=1, help='number of noise variables in RLCs')
 parser.add_argument('--model', choices=['mlp', 'gnn', 'rlc', 'rlc_set', 'rlc_graph', 'rlc_sphere'], default='mlp')
 parser.add_argument('--dataset', choices=['ball', 'parity', 'sort', 'connectivity'], default='ball')
@@ -74,9 +75,11 @@ def accuracy( model, loader ):
 for epoch in range(args.epochs):
     for x,y in train_loader:
         if torch.cuda.is_available(): x,y = x.cuda(), y.cuda()
+        x = x.repeat(args.k, 1)
+        y = y.repeat(args.k, 1)
         optimizer.zero_grad()
         y_hat = model(x)
-        loss = criterion(y_hat, y)
+        loss += criterion(y_hat, y)
         loss.backward()
         optimizer.step()
     print(epoch, '==\t Loss:\t', loss.item(), 'Train acc:\t', accuracy(model, train_loader).item(), 'Test acc:\t', accuracy(model, test_loader).item())
