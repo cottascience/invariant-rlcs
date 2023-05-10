@@ -16,7 +16,7 @@ class RLC(torch.nn.Module):
          self.mlp = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = x_size+1,
                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
          self.noise_size = noise_size
-         self.noise_dist = torch.distributions.ContinuousBernoulli(torch.tensor([0.5]))
+         self.noise_dist = torch.distributions.Normal(0,1)
          self.c1 = torch.nn.Parameter(torch.ones(1)*10)
          self.c2 = torch.nn.Parameter(torch.ones(1)*10)
          self.layer_norm =  nn.LayerNorm(x_size+1)
