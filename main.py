@@ -73,7 +73,7 @@ def accuracy( model, loader ):
 
 # Train the MLP model
 for epoch in range(args.epochs):
-    epoch_loss = 0
+    epoch_loss, epoch_size  = 0, 0
     for x,y in train_loader:
         if torch.cuda.is_available(): x,y = x.cuda(), y.cuda()
         x = x.repeat(args.k, 1)
@@ -83,5 +83,6 @@ for epoch in range(args.epochs):
         loss = criterion(y_hat, y)
         loss.backward()
         optimizer.step()
-        epoch_loss += loss.item()
-    print(epoch, '==\t Loss:\t', loss.item()/args.train_size, 'Train acc:\t', accuracy(model, train_loader).item(), 'Test acc:\t', accuracy(model, test_loader).item())
+        epoch_loss += loss.item()*x.shape[0]
+        epoch_size += x.shape[0]
+    print(epoch, '==\t Loss:\t', epoch_loss/epoch_size, 'Train acc:\t', accuracy(model, train_loader).item(), 'Test acc:\t', accuracy(model, test_loader).item())
