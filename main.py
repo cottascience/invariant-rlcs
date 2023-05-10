@@ -83,6 +83,7 @@ for epoch in range(args.epochs):
         for _ in range(args.k):
             weights += torch.sign(model(x))
         weights /= args.k
+        print(weights)
         loss = torch.mean(-weights*loss)
         loss.backward()
         optimizer.step()
