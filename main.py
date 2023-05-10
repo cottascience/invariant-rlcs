@@ -29,9 +29,9 @@ print('---Settings being used---')
 print(args)
 print('-------------------------')
 # Init the model
-model = models.MLP( num_layers=args.num_layers, layer_size = args.hidden_size, input_size=args.input_size, output_size=1, dropout_p=args.dropout, use_batchnorm=True )
-model = models.GIN( in_channels=args.input_size, hidden_channels=args.hidden_size, out_channels=1, num_layers=args.num_layers  )
-model = models.RLC( noise_size=args.noise_size, hidden_size=args.hidden_size, num_layers=args.num_layers, dropout_p=args.dropout, use_batchnorm=True, x_size=args.input_size )
+if args.model == 'mlp': model = models.MLP( num_layers=args.num_layers, layer_size = args.hidden_size, input_size=args.input_size, output_size=1, dropout_p=args.dropout, use_batchnorm=True )
+if args.model == 'gnn': models.GIN( in_channels=args.input_size, hidden_channels=args.hidden_size, out_channels=1, num_layers=args.num_layers  )
+if args.model == 'rlc': model = models.RLC( noise_size=args.noise_size, hidden_size=args.hidden_size, num_layers=args.num_layers, dropout_p=args.dropout, use_batchnorm=True, x_size=args.input_size )
 
 # Define the loss function (hinge loss)
 # criterion = nn.HingeEmbeddingLoss(margin=args.margin)
@@ -48,7 +48,9 @@ print('Creating test data')
 test_dataset = datasets[args.dataset]( args.test_size, args.input_size  )
 train_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size)
 test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
-exit()
+if args.model == 'gnn':
+    train_dataset.use_graphs
+    test_dataset.use_graphs
 
 def accuracy( model, loader ):
     model.eval()

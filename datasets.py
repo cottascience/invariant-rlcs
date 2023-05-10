@@ -11,6 +11,7 @@ class Parity(Dataset):
     def __init__(self, n, d):
         self.x = torch.randint(low=0, high=2, size=(n,d), dtype=torch.float32)
         self.y = torch.pow(-1,torch.sum(self.x, dim=1)).unsqueeze(1)
+        print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
         self.len = n
     # Getting the data
     def __getitem__(self, index):
@@ -25,6 +26,7 @@ class Connectivity(Dataset):
         p = math.log(d)/d
         graphs = []
         y = []
+        x = []
         for i in range(n):
             edge_index = erdos_renyi_graph(d,p)
             v = to_torch_coo_tensor(edge_index, size=d).to_dense().view((1,d*d))
@@ -33,14 +35,20 @@ class Connectivity(Dataset):
                 y.append(1)
             else:
                 y.append(-1)
+            x.append(v)
             graphs.append( Data(edge_index=edge_index, x = torch.ones((d,1)), v=v  ) )
         self.y = torch.tensor(y).unsqueeze(1)
-        print('Proportion in classes:\t', torch.sum((self.y + 1)/2)/n )
-        self.x = graphs
+        print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
+        self.x = torch.cat( x, dim=0 )
         self.len = n
+        self.graphs = graphs
+        self.use_graphs = False
     # Getting the data
     def __getitem__(self, index):
-        return Batch().from_data_list( [ self.x[i] for i in index ] ), self.y[index]
+        if self.use_graphs:
+            return Batch().from_data_list( [ self.graphs[i] for i in index ] ), self.y[index]
+        else:
+            return self.x[index], self.y[index]
     # Getting length of the data
     def __len__(self):
         return self.len
@@ -65,7 +73,7 @@ class Sort(Dataset):
          self.y = 2*(torch.tensor(( f < self.R), dtype=float)).unsqueeze(1) - 1
          self.len = n
          self.f = f
-         print('Proportion in classes:\t', torch.sum((self.y + 1)/2)/n )
+         print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
      # Getting the data
      def __getitem__(self, index):
          return self.x[index], self.y[index]
@@ -82,6 +90,7 @@ class Ball(Dataset):
          self.x = beta.rsample([n]) *  normal.rsample([n,d])
          self.y = 2*(torch.tensor((torch.norm(self.x,dim=1) < self.R), dtype=float)).unsqueeze(1) - 1
          self.len = n
+         print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
      # Getting the data
      def __getitem__(self, index):
          return self.x[index], self.y[index]

@@ -34,7 +34,8 @@ class GIN(torch.nn.Module):
         self.mlp = torch_geometric_MLP([hidden_channels, hidden_channels, out_channels],
                        norm=None, dropout=0.5)
 
-    def forward(self, x, edge_index, batch):
+    def forward(self, B):
+        x, edge_index, batch = B.x, B.edge_index, B.batch
         for conv in self.convs:
             x = conv(x, edge_index).relu()
         x = global_add_pool(x, batch)
