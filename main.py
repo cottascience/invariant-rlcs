@@ -12,19 +12,19 @@ import datasets
 
 # Parse the hyperparameters
 parser = argparse.ArgumentParser(description='experiments for randomized linear classifiers')
-parser.add_argument('--input_size', type=int, default=16, help='dimension of input')
-parser.add_argument('--hidden_size', type=int, default=16, help='number of hidden units in each layer in the MLP')
+parser.add_argument('--input_size', type=int, default=8, help='dimension of input')
+parser.add_argument('--hidden_size', type=int, default=8, help='number of hidden units in each layer in the MLP')
 parser.add_argument('--num_layers', type=int, default=1, help='number of hidden layers in the MLP')
-parser.add_argument('--train_size', type=int, default=1000, help='number of training examples')
-parser.add_argument('--test_size', type=int, default=1000, help='number of testing examples')
-parser.add_argument('--lr', type=float, default=1e-2, help='initial learning rate for the optimizer')
+parser.add_argument('--train_size', type=int, default=250, help='number of training examples')
+parser.add_argument('--test_size', type=int, default=100, help='number of testing examples')
+parser.add_argument('--lr', type=float, default=5e-1, help='initial learning rate for the optimizer')
 parser.add_argument('--epochs', type=int, default=1000, help='number of epochs to train for')
-parser.add_argument('--batch_size', type=int, default=64, help='mini-batch size for training')
+parser.add_argument('--batch_size', type=int, default=250, help='mini-batch size for training')
 parser.add_argument('--dropout', type=float, default=0.0, help='dropout probability for the MLP')
 parser.add_argument('--weight_decay', type=float, default=0.00, help='weight decay for L2 regularization')
 parser.add_argument('--m', type=int, default=100, help='number of samples used in RLCs for eval')
 parser.add_argument('--k', type=int, default=100, help='number of samples used in RLCs for train')
-parser.add_argument('--noise_size', type=int, default=16, help='number of noise variables in RLCs')
+parser.add_argument('--noise_size', type=int, default=1, help='number of noise variables in RLCs')
 parser.add_argument('--model', choices=['mlp', 'gnn', 'rlc', 'rlc_set', 'rlc_graph', 'rlc_sphere'], default='mlp')
 parser.add_argument('--dataset', choices=['ball', 'parity', 'sort', 'connectivity'], default='ball')
 args = parser.parse_args()
@@ -47,7 +47,7 @@ if torch.cuda.is_available(): model = model.cuda()
 criterion = nn.SoftMarginLoss()
 
 # Define the optimizer (Stochastic Gradient Descent) with L2 regularization
-optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+optimizer = optim.Adagrad(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max = args.epochs)
 
 # Create the data loaders
