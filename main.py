@@ -25,7 +25,9 @@ parser.add_argument('--noise_size', type=int, default=1, help='number of noise v
 parser.add_argument('--model', choices=['mlp', 'gnn', 'rlc', 'rlc_set', 'rlc_graph', 'rlc_sphere'], default='mlp')
 parser.add_argument('--dataset', choices=['ball', 'parity', 'sort', 'connectivity'], default='ball')
 args = parser.parse_args()
+print('---Settings being used---')
 print(args)
+print('-------------------------')
 # Init the model
 model = models.MLP( num_layers=args.num_layers, layer_size = args.hidden_size, input_size=args.input_size, output_size=1, dropout_p=args.dropout, use_batchnorm=True )
 model = models.GIN( in_channels=args.input_size, hidden_channels=args.hidden_size, out_channels=1, num_layers=args.num_layers  )
@@ -40,7 +42,9 @@ optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_
 
 # Create the data loaders
 datasets = { 'ball': datasets.Ball, 'parity': datasets.Parity , 'sort': datasets.Sort , 'connectivity': datasets.Connectivity  }
+print('Creating training data')
 train_dataset = datasets[args.dataset]( args.train_size, args.input_size  )
+print('Creating test data')
 test_dataset = datasets[args.dataset]( args.test_size, args.input_size  )
 train_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size)
 test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
