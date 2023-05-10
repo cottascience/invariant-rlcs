@@ -57,8 +57,8 @@ class RSetC(torch.nn.Module):
                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
          self.noise_size = noise_size
          self.noise_dist = torch.distributions.Normal(0,1)
-         self.c1 = torch.nn.Parameter(torch.ones(1))
-         self.c2 = torch.nn.Parameter(torch.ones(1))
+         self.c1 = torch.nn.Parameter(torch.ones(1)*10)
+         self.c2 = torch.nn.Parameter(torch.ones(1)*10)
      def forward(self, x):
         u = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
         ub = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
