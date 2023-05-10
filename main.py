@@ -63,7 +63,7 @@ test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
 if args.model == 'gnn':
     train_dataset.use_graphs
     test_dataset.use_graphs
-seed = random.randint(0, sys.maxint)
+seed = random.randint(0, sys.maxsize)
 torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 
