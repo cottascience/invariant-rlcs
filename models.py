@@ -28,10 +28,15 @@ class RLC(torch.nn.Module):
         b = out[:,-1].unsqueeze(1)
         #print(a,b,x)
         #print(self.c1, self.c2)
-        a = F.normalize(a)
+        #a = F.normalize(a)
         #print(a, b, self.c1, self.c2)
-        return F.tanh(dot(x,self.c1*a) - self.c2*b)
-
+        coin = torch.sign(torch.rand((x.shape[0],1)) - .5)
+        guess = torch.sign(torch.rand((x.shape[0],1)) - .5)
+        res = F.tanh(dot(x,self.c1*a) - self.c2*b)
+        for i in range(x.shape[0]):
+            if coin[i] > 0:
+                res[i] = guess[i]
+        return res
 
 class RSphereC(torch.nn.Module):
       def __init__(self, noise_size, hidden_size, num_layers, dropout_p, use_batchnorm, x_size):
