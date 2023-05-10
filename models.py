@@ -25,7 +25,7 @@ class RLC(torch.nn.Module):
         noise = self.normal.rsample([x.shape[0], self.noise_size]).to(x.device)
         noise = noise*self.sigma + self.mu
         out = self.mlp( noise )
-        out = self.layer_norm(out)
+        #out = self.layer_norm(out)
         a = out[:,:-1]
         b = out[:,-1].unsqueeze(1)
         return F.tanh(dot(x,self.c1*a) - self.c2*b)
