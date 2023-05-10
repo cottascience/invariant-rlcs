@@ -27,7 +27,7 @@ parser.add_argument('--model', choices=['mlp', 'gnn', 'rlc', 'rlc_set', 'rlc_gra
 parser.add_argument('--dataset', choices=['ball', 'parity', 'sort', 'connectivity'], default='ball')
 args = parser.parse_args()
 # python main.py --dataset ball --model mlp --input_size 10 --hidden_size 10 --num_layers 1 --lr 1e-4
-# python main.py --dataset ball --model rlc --input_size 10 --hidden_size 10 --num_layers 1 --lr 1e-4
+# python main.py --dataset ball --model rlc --input_size 10 --hidden_size 10 --num_layers 1 --lr 1e-4 --k 10 --m 10
 
 print('---Settings being used---')
 print(args)
@@ -35,7 +35,7 @@ print('-------------------------')
 # Init the model
 if args.model == 'mlp': model = models.MLP( num_layers=args.num_layers, layer_size = args.hidden_size, input_size=args.input_size, output_size=1, dropout_p=args.dropout, use_batchnorm=True )
 if args.model == 'gnn': models.GIN( in_channels=args.input_size, hidden_channels=args.hidden_size, out_channels=1, num_layers=args.num_layers  )
-if args.model == 'rlc': model = models.RLC( noise_size=args.noise_size, hidden_size=args.hidden_size, num_layers=args.num_layers, dropout_p=args.dropout, use_batchnorm=True, x_size=args.input_size )
+if args.model == 'rlc': model = models.RLC( noise_size=args.noise_size, hidden_size=args.hidden_size, num_layers=args.num_layers, dropout_p=args.dropout, use_batchnorm=False, x_size=args.input_size )
 
 if torch.cuda.is_available(): model = model.cuda()
 
