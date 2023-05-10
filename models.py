@@ -21,7 +21,6 @@ class RLC(torch.nn.Module):
          self.c2 = torch.nn.Parameter(torch.ones(1))
      def forward(self, x):
         noise = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
-        noise /= noise.norm(dim=1, keepdim=True)
         out = self.mlp( noise )
         a = out[:,:-1]
         b = out[:,-1].unsqueeze(1)
