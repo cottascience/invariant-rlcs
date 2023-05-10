@@ -27,7 +27,7 @@ class RLC(torch.nn.Module):
         a = out[:,:-1]
         b = out[:,-1].unsqueeze(1)
         #print(a,b,x)
-        print(self.c1, self.c2)
+        #print(self.c1, self.c2)
         return F.tanh(dot(x,self.c1*a) - self.c2*b)
 
 
