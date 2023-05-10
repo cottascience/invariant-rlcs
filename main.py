@@ -64,6 +64,7 @@ def accuracy( model, loader ):
         if torch.cuda.is_available(): x,y = x.cuda(), y.cuda()
         y_hat = torch.zeros_like(y)
         for _ in range(args.m):
+            print(y_hat.shape, model(x).shape)
             y_hat += torch.sign(model(x))
         y_hat = torch.sign(y_hat)
         correct += torch.sum(y_hat == y)
