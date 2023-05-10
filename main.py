@@ -81,6 +81,7 @@ for epoch in range(args.epochs):
         for _ in range(args.k):
             weights += torch.sign(model(x))
             weights /= args.k
+        weights = weights.detach()
         y_hat = model(x)
         loss = criterion(weights*y_hat, y)
         loss.backward()
