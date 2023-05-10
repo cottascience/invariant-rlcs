@@ -74,7 +74,6 @@ class RSetC(torch.nn.Module):
         a = out[:,:-1]
         b = out[:,-1].unsqueeze(1)
         res = dot(x,self.c1*a) - self.c2*b
-        print(res)
         return torch.tanh(res)
 
 class RSphereC(torch.nn.Module):
