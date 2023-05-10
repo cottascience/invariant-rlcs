@@ -45,7 +45,7 @@ if torch.cuda.is_available(): model = model.cuda()
 criterion = nn.SoftMarginLoss()
 
 # Define the optimizer (Stochastic Gradient Descent) with L2 regularization
-optimizer = optim.Adagrad(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max = args.epochs)
 
 # Create the data loaders
