@@ -20,6 +20,7 @@ class RLC(torch.nn.Module):
         noise = torch.rand(( x.shape[0], self.noise_size )).to(x.device) - .5
         out = self.mlp( noise )
         print(out,x)
+        print('wwwwwww')
         a = out[:,:-1]
         b = out[:,-1].unsqueeze(1)
         return dot(x,a) - b
