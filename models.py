@@ -22,9 +22,8 @@ class RLC(torch.nn.Module):
          self.c2 = torch.nn.Parameter(torch.ones(1))
          self.layer_norm = nn.LayerNorm(x_size+1)
      def forward(self, x):
-        #noise = self.normal.rsample([x.shape[0], self.noise_size]).to(x.device)
-        #noise = noise*self.sigma + self.mu
-        noise = torch.round(torch.rand( ( x.shape[0], self.noise_size  )))
+        noise = self.normal.rsample([x.shape[0], self.noise_size]).to(x.device)
+        noise = noise*self.sigma + self.mu
         out = self.mlp( noise )
         out = self.layer_norm(out)
         a = out[:,:-1]
