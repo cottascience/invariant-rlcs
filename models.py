@@ -7,6 +7,22 @@ from torch_geometric.nn import MLP as torch_geometric_MLP
 def dot( x, a ):
     return torch.bmm(x.view(x.shape[0], 1, x.shape[1]), a.view(a.shape[0], a.shape[1], 1)).reshape(x.shape[0],1)
 
+class DeepSets(torch.nn.Module):
+      def __init__(self, hidden_size, num_layers, dropout_p, use_batchnorm):
+          super(DeepSets, self).__init__()
+
+          norm = 'batch_norm' if use_batchnorm else None
+          act = nn.ReLU()
+          self.phi = torch_geometric_MLP(in_channels = 1, hidden_channels = hidden_size, out_channels = hidden_size,
+                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
+          self.rho = torch_geometric_MLP(in_channels = hidden_size, hidden_channels = hidden_size, out_channels = 1,
+                          num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
+      def forward(self, x):
+          out = 0
+          for i in range(x.shape[1]):
+              out += self.phi(x[:,i].view(x.shape[0],1))
+          return torch.tanh(self.rho(out))
+
 class RLC(torch.nn.Module):
      def __init__(self, noise_size, hidden_size, num_layers, dropout_p, use_batchnorm, x_size):
          super(RLC, self).__init__()
