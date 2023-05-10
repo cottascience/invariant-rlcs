@@ -89,7 +89,6 @@ for epoch in range(args.epochs):
         x,y = x.repeat(args.k,1), y.repeat(args.k,1)
         optimizer.zero_grad()
         y_hat = model(x)
-        print(y_hat)
         loss = criterion(y_hat, y)
         loss.backward()
         optimizer.step()
