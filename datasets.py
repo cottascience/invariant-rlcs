@@ -88,7 +88,7 @@ class Ball(Dataset):
          normal = torch.distributions.Normal(0., 1.)
          self.x = normal.rsample([n,d])
          self.x /= self.x.norm(dim=1, keepdim=True)
-         normal = torch.distributions.Normal(0.,math.exp(-math.log(d)))
+         normal = torch.distributions.Normal(0.,math.sqrt(-math.log(d)))
          self.x += normal.rsample([n,d])
          self.y = 2*(torch.tensor((torch.norm(self.x,dim=1) < self.R), dtype=float)).unsqueeze(1) - 1
          self.len = n
