@@ -77,13 +77,12 @@ for epoch in range(args.epochs):
     for x,y in train_loader:
         if torch.cuda.is_available(): x,y = x.cuda(), y.cuda()
         optimizer.zero_grad()
-        y_hat = model(x)
-        loss = criterion(y_hat, y)
-        weights = torch.zeros_like(y) + 1e-6
+        weights = torch.zeros_like(y)
         for _ in range(args.k):
             weights += torch.sign(model(x))
-        weights /= args.k
-        loss = torch.mean(-weights*loss)
+            weights /= args.k
+        y_hat = model(x)
+        loss = criterion(weights*y_hat, y)
         loss.backward()
         optimizer.step()
         epoch_loss += loss.item()*x.shape[0]
