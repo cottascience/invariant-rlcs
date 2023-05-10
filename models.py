@@ -46,6 +46,7 @@ class RSphereC(torch.nn.Module):
          u = self.noise_dist.rsample([x.shape[0], self.noise_size//2]).to(x.device)
          u_sigma = self.noise_dist.rsample([x.shape[0], self.noise_size//2]).to(x.device)
          u_b = self.noise_dist.rsample([x.shape[0], self.noise_size//2]).to(x.device)
+         print(torch.cat([u,u_sigma],dim=1 ).shape)
          sigma = self.sigma_mlp( torch.cat([u,u_sigma],dim=1 ))
          b = self.b_mlp( torch.cat([u,u_b],dim=1))
          a = sigma * self.normal.rsample( x.shape  )
