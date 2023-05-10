@@ -41,7 +41,7 @@ if args.model == 'gnn': models.GIN( in_channels=args.input_size, hidden_channels
 if args.model == 'rlc': model = models.RLC( noise_size=args.noise_size, hidden_size=args.hidden_size, num_layers=args.num_layers, dropout_p=args.dropout, use_batchnorm=True, x_size=args.input_size )
 if args.model == 'rlc_sphere': model = models.RSphereC( noise_size=args.noise_size, hidden_size=args.hidden_size, num_layers=args.num_layers, dropout_p=args.dropout, use_batchnorm=True, x_size=args.input_size )
 if args.model == 'deepsets': model = models.DeepSets(hidden_size=args.hidden_size, num_layers=args.num_layers,
-                                                     dropout_p=args.dropout, True)
+                                                     dropout_p=args.dropout, use_batchnorm=True)
 
 if torch.cuda.is_available(): model = model.cuda()
 
