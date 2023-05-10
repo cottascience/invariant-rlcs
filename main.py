@@ -42,7 +42,6 @@ if torch.cuda.is_available(): model = model.cuda()
 # Define the loss function (hinge loss)
 # criterion = nn.HingeEmbeddingLoss(margin=args.margin)
 criterion = nn.SoftMarginLoss()
-criterion = nn.HingeEmbeddingLoss(1)
 
 # Define the optimizer (Stochastic Gradient Descent) with L2 regularization
 optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
