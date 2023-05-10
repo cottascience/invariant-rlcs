@@ -33,9 +33,9 @@ class RSphereC(torch.nn.Module):
 
           norm = 'batch_norm' if use_batchnorm else None
           act = nn.LeakyReLU()
-          self.sigma_mlp = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = 1,
+          self.sigma_mlp = torch_geometric_MLP(in_channels = 2*noise_size, hidden_channels = hidden_size, out_channels = 1,
                          num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
-          self.b_mlp = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = 1,
+          self.b_mlp = torch_geometric_MLP(in_channels = 2*noise_size, hidden_channels = hidden_size, out_channels = 1,
                           num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
           self.noise_size = noise_size
           self.noise_dist = torch.distributions.Normal(0,.1)
@@ -43,10 +43,9 @@ class RSphereC(torch.nn.Module):
           self.c2 = torch.nn.Parameter(torch.ones(1))
           self.normal = torch.distributions.Normal(0,1)
       def forward(self, x):
-         u = self.noise_dist.rsample([x.shape[0], self.noise_size//2]).to(x.device)
-         u_sigma = self.noise_dist.rsample([x.shape[0], self.noise_size//2]).to(x.device)
-         u_b = self.noise_dist.rsample([x.shape[0], self.noise_size//2]).to(x.device)
-         print(torch.cat([u,u_sigma],dim=1 ).shape)
+         u = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
+         u_sigma = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
+         u_b = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
          sigma = self.sigma_mlp( torch.cat([u,u_sigma],dim=1 ))
          b = self.b_mlp( torch.cat([u,u_b],dim=1))
          a = sigma * self.normal.rsample( x.shape  )
