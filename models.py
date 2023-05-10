@@ -26,6 +26,31 @@ class RLC(torch.nn.Module):
         b = out[:,-1].unsqueeze(1)
         return F.tanh(dot(x,self.c1*a) - self.c2*b)
 
+
+class RSphereC(torch.nn.Module):
+      def __init__(self, noise_size, hidden_size, num_layers, dropout_p, use_batchnorm, x_size):
+          super(RSphereC, self).__init__()
+
+          norm = 'batch_norm' if use_batchnorm else None
+          act = nn.LeakyReLU()
+          self.sigma_mlp = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = 1,
+                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
+          self.b_mlp = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = 1,
+                          num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
+          self.noise_size = noise_size
+          self.noise_dist = torch.distributions.Normal(0,.1)
+          self.c1 = torch.nn.Parameter(torch.ones(1))
+          self.c2 = torch.nn.Parameter(torch.ones(1))
+          self.normal = torch.distributions.Normal(0,1)
+      def forward(self, x):
+         u = self.noise_dist.rsample([x.shape[0], self.noise_size//2]).to(x.device)
+         u_sigma = self.noise_dist.rsample([x.shape[0], self.noise_size//2]).to(x.device)
+         u_b = self.noise_dist.rsample([x.shape[0], self.noise_size//2]).to(x.device)
+         sigma = self.sigma_mlp( torch.cat([u,u_sigma],dim=1)
+         b = self.b_mlp( torch.cat([u,u_b],dim=1)
+         a = sigma * self.normal.rsample( x.shape  )
+         return F.tanh(dot(x,self.c1*a) - self.c2*b)
+
 class GIN(torch.nn.Module):
     def __init__(self, in_channels, hidden_channels, out_channels, num_layers):
         super(GIN, self).__init__()
