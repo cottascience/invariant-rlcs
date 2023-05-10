@@ -19,7 +19,6 @@ class RLC(torch.nn.Module):
          self.noise_dist = torch.distributions.Normal(1,.1)
          self.c1 = torch.nn.Parameter(torch.ones(10))
          self.c2 = torch.nn.Parameter(torch.ones(10))
-         self.Poisson = torch.distributions.Poisson(10)
          #self.layer_norm =  nn.LayerNorm(x_size+1)
      def forward(self, x):
         noise = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
@@ -28,7 +27,8 @@ class RLC(torch.nn.Module):
         a = out[:,:-1]
         b = out[:,-1].unsqueeze(1)
         #print(a,b,x)
-        return F.tanh(dot(x,self.Poisson.sample()*a) - self.Poisson.sample()*b)
+        print(self.c1, self.c2)
+        return F.tanh(dot(x,self.c1*a) - self.c2*b)
 
 
 class RSphereC(torch.nn.Module):
