@@ -52,7 +52,7 @@ print('Creating training data')
 train_dataset = datasets[args.dataset]( args.train_size, args.input_size  )
 print('Creating test data')
 test_dataset = datasets[args.dataset]( args.test_size, args.input_size  )
-train_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size)
+train_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size, shuffle=True)
 test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
 if args.model == 'gnn':
     train_dataset.use_graphs
