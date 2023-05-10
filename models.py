@@ -68,8 +68,6 @@ class RSetC(torch.nn.Module):
             ua = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
             a.append( self.a_mlp( torch.cat([u,ua],dim=1) ) )
         a = torch.cat(a, dim=1)
-        print(a,b)
-        print("ppppppppp")
         res = dot(x,self.c1*a) - self.c2*b
         return torch.tanh(res)
 
