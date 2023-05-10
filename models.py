@@ -13,6 +13,10 @@ class RLC(torch.nn.Module):
 
          norm = 'batch_norm' if use_batchnorm else None
          act = nn.LeakyReLU()
+         self.a = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = x_size,
+ >>                        num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
+         self.b = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = 1,
+ >>                        num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
          self.mlp = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = x_size+1,
                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
          self.noise_size = noise_size
@@ -24,9 +28,11 @@ class RLC(torch.nn.Module):
      def forward(self, x):
         noise = self.normal.rsample([x.shape[0], self.noise_size]).to(x.device)
         noise = noise*self.sigma + self.mu
-        out = self.mlp( noise )
-        a = out[:,:-1]
-        b = out[:,-1].unsqueeze(1)
+        #out = self.mlp( noise )
+        #a = out[:,:-1]
+        #b = out[:,-1].unsqueeze(1)
+        a = self.a(noise)
+        b = self.b(noise)
         return F.tanh(dot(x,self.c1*a) - self.c2*b)
 
 class GIN(torch.nn.Module):
