@@ -59,6 +59,8 @@ class RSetC(torch.nn.Module):
          self.noise_dist = torch.distributions.Normal(0,5)
          self.c1 = torch.nn.Parameter(torch.ones(1)*10)
          self.c2 = torch.nn.Parameter(torch.ones(1)*10)
+         self.layer_norm =  nn.LayerNorm(x_size+1)
+
      def forward(self, x):
         u = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
         ub = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
@@ -68,6 +70,9 @@ class RSetC(torch.nn.Module):
             ua = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
             a.append( self.a_mlp( torch.cat([u,ua],dim=1) ) )
         a = torch.cat(a, dim=1)
+        out = self.layer_norm( torch.cat([a,b],dim=1) )
+        a = out[:,:-1]
+        b = out[:,-1].unsqueeze(1)
         res = dot(x,self.c1*a) - self.c2*b
         return torch.tanh(res)
 
