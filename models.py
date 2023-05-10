@@ -59,7 +59,7 @@ class RSphereC(torch.nn.Module):
          a = sigma * self.normal.rsample( x.shape  ).to(x.device)
          #print(a, b)
          #print('---')
-         return F.tanh(dot(x,self.c1*a) - self.c2*b)
+         return dot(x,self.c1*a) - self.c2*b
 
 class GIN(torch.nn.Module):
     def __init__(self, in_channels, hidden_channels, out_channels, num_layers):
