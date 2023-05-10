@@ -28,11 +28,11 @@ class RLC(torch.nn.Module):
      def forward(self, x):
         noise = self.normal.rsample([x.shape[0], self.noise_size]).to(x.device)
         noise = noise*self.sigma + self.mu
-        #out = self.mlp( noise )
-        #a = out[:,:-1]
-        #b = out[:,-1].unsqueeze(1)
-        a = self.a(noise)
-        b = self.b(noise)
+        out = self.mlp( noise )
+        a = out[:,:-1]
+        b = out[:,-1].unsqueeze(1)
+        #a = self.a(noise)
+        #b = self.b(noise)
         return F.tanh(dot(x,self.c1*a) - self.c2*b)
 
 class GIN(torch.nn.Module):
