@@ -15,9 +15,9 @@ class RLC(torch.nn.Module):
                         num_layers=num_layers, norm=norm, dropout=dropout_p)
          self.noise_size = noise_size
      def forward(self, x):
-         # noise = torch.rand(( x.shape[0], self.noise_size )).to(x.device)
-         normal = torch.distributions.Normal(0,1)
-         noise = normal.rsample( [ x.shape[0], self.noise_size ]  ).to(x.device)
+         noise = torch.rand(( x.shape[0], self.noise_size )).to(x.device)
+         #normal = torch.distributions.Normal(0,1)
+         #noise = normal.rsample( [ x.shape[0], self.noise_size ]  ).to(x.device)
          out = self.mlp( noise  )
          a = out[:,:-1]
          b = out[:,-1].unsqueeze(1)
