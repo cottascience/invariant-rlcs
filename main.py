@@ -44,7 +44,7 @@ if torch.cuda.is_available(): model = model.cuda()
 criterion = nn.SoftMarginLoss()
 
 # Define the optimizer (Stochastic Gradient Descent) with L2 regularization
-optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
 # Create the data loaders
 datasets = { 'ball': datasets.Ball, 'parity': datasets.Parity , 'sort': datasets.Sort , 'connectivity': datasets.Connectivity  }
