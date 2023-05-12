@@ -127,6 +127,7 @@ for run in range(args.runs):
     train_results.append( best_train  )
     test_results.append( best_test )
 
+print(test_results)
 print( "Final train results:\t", np.mean(np.array( train_results ) ) , np.std(np.array( train_results ) ) )
 print( "Final test results:\t", np.mean(np.array( test_results ) ) , np.std(np.array( test_results ) ))
 
