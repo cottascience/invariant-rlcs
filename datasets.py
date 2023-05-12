@@ -54,6 +54,9 @@ class Connectivity(Dataset):
     # Getting length of the data
     def __len__(self):
         return self.len
+    def collate_fn(batch):
+        if type(batch) == list:
+            return batch
 
 class Sort(Dataset):
      # Constructor
