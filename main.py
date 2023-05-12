@@ -114,7 +114,7 @@ for run in range(args.runs):
             best_test = accuracy(model, test_loader).item()
             patience -= 1
         if patience == 0: break
-        print(epoch, '==\t Loss:\t', epoch_loss/epoch_size, 'LR:\t',scheduler.get_lr(),'Train acc:\t', accuracy(model, train_loader).item(), 'Val acc:\t', val_acc, 'Test acc:\t', accuracy(model, test_loader).item())
+        print(epoch, '==\t Loss:\t', epoch_loss/epoch_size, 'LR:\t',scheduler.get_lr(),'Train acc:\t', accuracy(model, train_loader).item(), 'Val acc:\t', val_acc, 'Test acc:\t', accuracy(model, test_loader).item(), 'Patience:\t', patience)
 
     # Save the performance
     train_results.append( best_train  )
