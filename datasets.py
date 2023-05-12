@@ -8,10 +8,11 @@ import networkx as nx
 
 class Parity(Dataset):
     # Constructor
-    def __init__(self, n, d):
+    def __init__(self, n, d, log=False):
         self.x = torch.randint(low=0, high=2, size=(n,d), dtype=torch.float32)
         self.y = torch.pow(-1,torch.sum(self.x, dim=1)).unsqueeze(1)
         print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
+        if log: print('Constant classifier:', max( [ 1 - (torch.sum((self.y + 1)/2)/n).item(), (torch.sum((self.y + 1)/2)/n).item()  ]  ) )
         self.len = n
     # Getting the data
     def __getitem__(self, index):
@@ -22,7 +23,7 @@ class Parity(Dataset):
 
 class Connectivity(Dataset):
     # Constructor
-    def __init__(self, n, d):
+    def __init__(self, n, d, log=False):
         p = math.log(d)/d
         graphs = []
         y = []
@@ -39,6 +40,7 @@ class Connectivity(Dataset):
             graphs.append( Data(edge_index=edge_index, x = torch.ones((d,1)), v=v  ) )
         self.y = torch.tensor(y).unsqueeze(1)
         print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
+        if log: print('Constant classifier:', max( [ 1 - (torch.sum((self.y + 1)/2)/n).item(), (torch.sum((self.y + 1)/2)/n).item()  ]  ) )
         self.x = torch.cat( x, dim=0 )
         self.len = n
         self.graphs = graphs
@@ -55,7 +57,7 @@ class Connectivity(Dataset):
 
 class Sort(Dataset):
      # Constructor
-     def __init__(self, n, d):
+     def __init__(self, n, d, log=False):
          mean = 0.
          scale = 1.
          normal = torch.distributions.Normal(mean, scale)
@@ -74,7 +76,8 @@ class Sort(Dataset):
          self.len = n
          self.f = f
          print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
-     # Getting the data
+         if log: print('Constant classifier:', max( [ 1 - (torch.sum((self.y + 1)/2)/n).item(), (torch.sum((self.y + 1)/2)/n).item()  ]  ) )
+         # Getting the data
      def __getitem__(self, index):
          return self.x[index], self.y[index]
      # Getting length of the data
