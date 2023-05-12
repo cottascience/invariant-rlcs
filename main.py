@@ -21,6 +21,7 @@ parser.add_argument('--test_size', type=int, default=100, help='number of testin
 parser.add_argument('--lr', type=float, default=5e-1, help='initial learning rate for the optimizer')
 parser.add_argument('--epochs', type=int, default=1000, help='number of epochs to train for')
 parser.add_argument('--runs', type=int, default=10, help='number of runs')
+parser.add_argument('--patience', type=int, default=30, help='patience')
 parser.add_argument('--batch_size', type=int, default=250, help='mini-batch size for training')
 parser.add_argument('--dropout', type=float, default=0.0, help='dropout probability for the MLP')
 parser.add_argument('--weight_decay', type=float, default=0.00, help='weight decay for L2 regularization')
@@ -93,7 +94,7 @@ for run in range(args.runs):
 
     # Train the model
     best_val, best_train, best_test = 0, 0, 0
-    patience = 10
+    patience = args.patience
     for epoch in range(args.epochs):
         epoch_loss, epoch_size  = 0, 0
         for x,y in train_loader:
@@ -113,7 +114,7 @@ for run in range(args.runs):
             best_val = val_acc
             best_train = accuracy(model, train_loader).item()
             best_test = accuracy(model, test_loader).item()
-            patience = 10
+            patience = args.patience
         if patience == 0: break
         print(epoch, '==\t Loss:\t', epoch_loss/epoch_size, 'LR:\t',scheduler.get_lr(),'Train acc:\t', accuracy(model, train_loader).item(), 'Val acc:\t', val_acc, 'Test acc:\t', accuracy(model, test_loader).item(), 'Patience:\t', patience, best_val)
 
