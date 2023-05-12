@@ -83,7 +83,7 @@ class Sort(Dataset):
 
 class Ball(Dataset):
      # Constructor
-     def __init__(self, n,d):
+     def __init__(self, n,d,log=False):
          self.R = 1.
          normal = torch.distributions.Normal(0., 1.)
          self.x = normal.rsample([n,d])
@@ -93,6 +93,7 @@ class Ball(Dataset):
          self.y = 2*(torch.tensor((torch.norm(self.x,dim=1) < self.R), dtype=float)).unsqueeze(1) - 1
          self.len = n
          print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
+         if log: print('Constant classifier:', max( [ 1 - (torch.sum((self.y + 1)/2)/n).item(), (torch.sum((self.y + 1)/2)/n).item()  ]  ) )
      # Getting the data
      def __getitem__(self, index):
          return self.x[index], self.y[index]

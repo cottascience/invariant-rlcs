@@ -69,12 +69,12 @@ for run in range(args.runs):
     print('Creating validation data')
     val_dataset = datasets_dict[args.dataset]( args.test_size, args.input_size  )
     print('Creating test data')
-    test_dataset = datasets_dict[args.dataset]( args.test_size, args.input_size  )
+    test_dataset = datasets_dict[args.dataset]( args.test_size, args.input_size, log=True  )
     train_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size, shuffle=True)
     val_loader = DataLoader(dataset = val_dataset, batch_size = args.batch_size)
     test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
     if args.OOD:
-        test_dataset = datasets_dict[args.dataset]( args.test_size, args.input_size*2 + 1 )
+        test_dataset = datasets_dict[args.dataset]( args.test_size, args.input_size*2 + 1 , log=True)
         test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
     if args.model == 'gnn':
         train_dataset.use_graphs
@@ -127,7 +127,6 @@ for run in range(args.runs):
     train_results.append( best_train  )
     test_results.append( best_test )
 
-print(test_results)
-print( "Final train results:\t", np.mean(np.array( train_results ) ) , np.std(np.array( train_results ) ) )
-print( "Final test results:\t", np.mean(np.array( test_results ) ) , np.std(np.array( test_results ) ))
+print( "Final train results:", np.mean(np.array( train_results ) ) , np.std(np.array( train_results ) ) )
+print( "Final test results:", np.mean(np.array( test_results ) ) , np.std(np.array( test_results ) ))
 
