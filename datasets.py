@@ -37,7 +37,7 @@ class Connectivity(Dataset):
             else:
                 y.append(-1)
             x.append(v)
-            graphs.append( Data(edge_index=edge_index, x = torch.ones((d,1)), v=v  ) )
+            graphs.append( edge_index )
         self.y = torch.tensor(y).unsqueeze(1)
         print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
         if log: print('Constant classifier:', max( [ 1 - (torch.sum((self.y + 1)/2)/n).item(), (torch.sum((self.y + 1)/2)/n).item()  ]  ) )
