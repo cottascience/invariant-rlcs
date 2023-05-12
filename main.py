@@ -21,7 +21,7 @@ parser.add_argument('--test_size', type=int, default=100, help='number of testin
 parser.add_argument('--lr', type=float, default=5e-1, help='initial learning rate for the optimizer')
 parser.add_argument('--epochs', type=int, default=1000, help='number of epochs to train for')
 parser.add_argument('--runs', type=int, default=10, help='number of runs')
-parser.add_argument('--patienc', type=int, default=30, help='patience')
+parser.add_argument('--patience', type=int, default=30, help='patience')
 parser.add_argument('--batch_size', type=int, default=250, help='mini-batch size for training')
 parser.add_argument('--dropout', type=float, default=0.0, help='dropout probability for the MLP')
 parser.add_argument('--weight_decay', type=float, default=0.00, help='weight decay for L2 regularization')
