@@ -64,7 +64,7 @@ for run in range(args.runs):
     print('Creating training data')
     train_dataset = datasets_dict[args.dataset]( args.train_size, args.input_size  )
     print('Creating validation data')
-    val_dataset = datasets_dict[args.dataset]( args.val_size, args.input_size  )
+    val_dataset = datasets_dict[args.dataset]( args.test_size, args.input_size  )
     print('Creating test data')
     test_dataset = datasets_dict[args.dataset]( args.test_size, args.input_size  )
     train_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size, shuffle=True)
