@@ -54,7 +54,6 @@ for run in range(args.runs):
     if torch.cuda.is_available(): model = model.cuda()
 
     # Define the loss function (hinge loss)
-    # criterion = nn.HingeEmbeddingLoss(margin=args.margin)
     criterion = nn.SoftMarginLoss()
 
     # Define the optimizer with L2 regularization
@@ -112,6 +111,6 @@ for run in range(args.runs):
     train_results.append( accuracy(model, train_loader).item() )
     test_resutls.append( accuracy(model, test_loader).item() )
 
-print( "Final train results:\t", np.mean(np.array( train_resutls ) ) , np.mean(np.array( train_resutls ) ) )
-print( "Final test results:\t", np.mean(np.array( test_resutls ) ) , np.mean(np.array( test_resutls ) ))
+print( "Final train results:\t", np.mean(np.array( train_results ) ) , np.mean(np.array( train_results ) ) )
+print( "Final test results:\t", np.mean(np.array( test_results ) ) , np.mean(np.array( test_results ) ))
 
