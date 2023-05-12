@@ -34,13 +34,6 @@ args = parser.parse_args()
 # python main.py --dataset ball --model mlp
 # python main.py --dataset ball --model rlc --batch_size 1000 --lr 0.5
 
-# python main.py --dataset sort --model deepsets --input_size 11 --hidden_size 25 --k 1 --m 1 --train_size 1000
-# python main.py --dataset sort --model deepsets --input_size 25 --hidden_size 25 --k 1 --m 1 --train_size 1000
-# python main.py --dataset sort --model deepsets --input_size 51 --hidden_size 25 --k 1 --m 1 --train_size 1000
-# python main.py --dataset sort --model deepsets --input_size 75 --hidden_size 25 --k 1 --m 1 --train_size 1000
-# python main.py --dataset sort --model deepsets --input_size 101 --hidden_size 25 --k 1 --m 1 --train_size 1000
-# python main.py --dataset sort --model deepsets --input_size 151 --hidden_size 25 --k 1 --m 1 --train_size 1000
-# python main.py --dataset sort --model deepsets --input_size 201 --hidden_size 25 --k 1 --m 1 --train_size 1000
 
 print('---Settings being used---')
 print(args)
