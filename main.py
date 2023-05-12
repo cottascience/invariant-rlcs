@@ -42,9 +42,6 @@ args = parser.parse_args()
 # python main.py --dataset sort --model deepsets --input_size 151 --hidden_size 25 --k 1 --m 1 --train_size 1000
 # python main.py --dataset sort --model deepsets --input_size 201 --hidden_size 25 --k 1 --m 1 --train_size 1000
 
-
-
-
 print('---Settings being used---')
 print(args)
 print('-------------------------')
@@ -75,11 +72,11 @@ for run in range(args.runs):
     # Create the data loaders
     torch.manual_seed(1234)
     torch.cuda.manual_seed(1234)
-    datasets = { 'ball': datasets.Ball, 'parity': datasets.Parity , 'sort': datasets.Sort , 'connectivity': datasets.Connectivity  }
+    datasets_dict = { 'ball': datasets.Ball, 'parity': datasets.Parity , 'sort': datasets.Sort , 'connectivity': datasets.Connectivity  }
     print('Creating training data')
-    train_dataset = datasets[args.dataset]( args.train_size, args.input_size  )
+    train_dataset = datasets_dict[args.dataset]( args.train_size, args.input_size  )
     print('Creating test data')
-    test_dataset = datasets[args.dataset]( args.test_size, args.input_size  )
+    test_dataset = datasets_dict[args.dataset]( args.test_size, args.input_size  )
     train_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size, shuffle=True)
     test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
     if args.model == 'gnn':
