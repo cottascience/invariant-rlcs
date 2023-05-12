@@ -35,7 +35,7 @@ print('---Settings being used---')
 print(args)
 print('-------------------------')
 train_results = []
-test_resutls = []
+test_results = []
 
 for run in range(args.runs):
     # Init the model
@@ -119,7 +119,7 @@ for run in range(args.runs):
 
     # Save the performance
     train_results.append( best_train  )
-    test_resutls.append( best_test )
+    test_results.append( best_test )
 
 print( "Final train results:\t", np.mean(np.array( train_results ) ) , np.mean(np.array( train_results ) ) )
 print( "Final test results:\t", np.mean(np.array( test_results ) ) , np.mean(np.array( test_results ) ))
