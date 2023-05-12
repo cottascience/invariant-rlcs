@@ -93,7 +93,7 @@ for run in range(args.runs):
 
     # Train the model
     best_val, best_train, best_test = 0, 0, 0
-    patience = 30
+    patience = 10
     for epoch in range(args.epochs):
         epoch_loss, epoch_size  = 0, 0
         for x,y in train_loader:
@@ -112,6 +112,7 @@ for run in range(args.runs):
             best_val = val_acc
             best_train = accuracy(model, train_loader).item()
             best_test = accuracy(model, test_loader).item()
+            patience -= 1
         if patience == 0: break
         print(epoch, '==\t Loss:\t', epoch_loss/epoch_size, 'LR:\t',scheduler.get_lr(),'Train acc:\t', accuracy(model, train_loader).item(), 'Val acc:\t', val_acc, 'Test acc:\t', accuracy(model, test_loader).item())
 
