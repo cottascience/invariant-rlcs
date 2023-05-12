@@ -30,6 +30,8 @@ parser.add_argument('--k', type=int, default=100, help='number of samples used i
 parser.add_argument('--noise_size', type=int, default=1, help='number of noise variables in RLCs')
 parser.add_argument('--model', choices=['mlp', 'gnn', 'deepsets' ,'rlc', 'rlc_set', 'rlc_graph', 'rlc_sphere'], default='mlp')
 parser.add_argument('--dataset', choices=['ball', 'parity', 'sort', 'connectivity'], default='ball')
+parser.add_argument('--OOD', action='store_true')
+
 args = parser.parse_args()
 
 print('---Settings being used---')
@@ -71,6 +73,9 @@ for run in range(args.runs):
     train_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size, shuffle=True)
     val_loader = DataLoader(dataset = val_dataset, batch_size = args.batch_size)
     test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
+    if args.OOD:
+        test_dataset = datasets_dict[args.dataset]( args.test_size, args.input_size*2 + 1 )
+        test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
     if args.model == 'gnn':
         train_dataset.use_graphs
         test_dataset.use_graphs
