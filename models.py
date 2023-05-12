@@ -37,10 +37,10 @@ class RLC(torch.nn.Module):
          self.noise_dist = torch.distributions.Normal(0,1)
          self.c1 = torch.nn.Parameter(torch.ones(1)*1)
          self.c2 = torch.nn.Parameter(torch.ones(1)*1)
-         self.layer_norm =  nn.LayerNorm(x_size+1)
+         self.layer_norm =  nn.LayerNorm(x_size)
      def forward(self, x):
         noise = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
-        a = self.a(noise)
+        a = self.layer_norm(self.a(noise))
         b = self.b(noise)
         res = dot(x,self.c1*a) - self.c2*b
         return torch.tanh(res)
