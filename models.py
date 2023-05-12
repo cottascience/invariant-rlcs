@@ -31,6 +31,8 @@ class RLC(torch.nn.Module):
          act = nn.LeakyReLU()
          self.mlp = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = x_size+1,
                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
+         self.b = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = 1,
+                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
          self.noise_size = noise_size
          self.noise_dist = torch.distributions.Normal(0,1)
          self.c1 = torch.nn.Parameter(torch.ones(1)*1)
@@ -41,7 +43,8 @@ class RLC(torch.nn.Module):
         out = self.mlp( noise )
         out = self.layer_norm(out)
         a = out[:,:-1]
-        b = out[:,-1].unsqueeze(1)
+        #b = out[:,-1].unsqueeze(1)
+        b = self.b(noise)
         res = dot(x,self.c1*a) - self.c2*b
         return torch.tanh(res)
 
