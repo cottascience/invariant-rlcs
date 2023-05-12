@@ -48,7 +48,7 @@ class Connectivity(Dataset):
     # Getting the data
     def __getitem__(self, index):
         if self.use_graphs:
-            return Batch().from_data_list( [ self.graphs[i] for i in index ] ), self.y[index]
+            return self.graphs[i], self.y[index]
         else:
             return self.x[index], self.y[index]
     # Getting length of the data

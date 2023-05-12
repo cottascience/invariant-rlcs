@@ -10,6 +10,7 @@ from torch.optim.lr_scheduler import CosineAnnealingLR
 import models
 import sys
 import datasets
+import torch_geometric
 
 # Parse the hyperparameters
 parser = argparse.ArgumentParser(description='experiments for randomized linear classifiers')
@@ -103,6 +104,7 @@ for run in range(args.runs):
     for epoch in range(args.epochs):
         epoch_loss, epoch_size  = 0, 0
         for x,y in train_loader:
+            if type(x) == list: x = torch_geometric.data.Batch().from_data_list(x)
             if torch.cuda.is_available(): x,y = x.cuda(), y.cuda()
             x,y = x.repeat(args.k,1), y.repeat(args.k,1)
             optimizer.zero_grad()
