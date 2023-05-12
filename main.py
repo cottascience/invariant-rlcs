@@ -34,7 +34,6 @@ args = parser.parse_args()
 # python main.py --dataset ball --model mlp
 # python main.py --dataset ball --model rlc --batch_size 1000 --lr 0.5
 
-
 print('---Settings being used---')
 print(args)
 print('-------------------------')
@@ -58,7 +57,7 @@ for run in range(args.runs):
     # criterion = nn.HingeEmbeddingLoss(margin=args.margin)
     criterion = nn.SoftMarginLoss()
 
-    # Define the optimizer (Stochastic Gradient Descent) with L2 regularization
+    # Define the optimizer with L2 regularization
     optimizer = optim.Adagrad(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max = args.epochs)
 
