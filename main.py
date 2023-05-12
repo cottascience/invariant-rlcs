@@ -63,9 +63,12 @@ for run in range(args.runs):
     datasets_dict = { 'ball': datasets.Ball, 'parity': datasets.Parity , 'sort': datasets.Sort , 'connectivity': datasets.Connectivity  }
     print('Creating training data')
     train_dataset = datasets_dict[args.dataset]( args.train_size, args.input_size  )
+    print('Creating validation data')
+    val_dataset = datasets_dict[args.dataset]( args.val_size, args.input_size  )
     print('Creating test data')
     test_dataset = datasets_dict[args.dataset]( args.test_size, args.input_size  )
     train_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size, shuffle=True)
+    val_loader = DataLoader(dataset = val_dataset, batch_size = args.batch_size)
     test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
     if args.model == 'gnn':
         train_dataset.use_graphs
@@ -89,6 +92,8 @@ for run in range(args.runs):
         return correct/total
 
     # Train the model
+    best_val, best_train, best_test = 0, 0, 0
+    patience = 30
     for epoch in range(args.epochs):
         epoch_loss, epoch_size  = 0, 0
         for x,y in train_loader:
@@ -102,11 +107,17 @@ for run in range(args.runs):
             epoch_loss += loss.item()*x.shape[0]
             epoch_size += x.shape[0]
         scheduler.step()
-        print(epoch, '==\t Loss:\t', epoch_loss/epoch_size, 'LR:\t',scheduler.get_lr(),'Train acc:\t', accuracy(model, train_loader).item(), 'Test acc:\t', accuracy(model, test_loader).item())
+        val_acc = accuracy(model, val_loader).item()
+        if val_acc > best_val:
+            best_val = val_acc
+            best_train = accuracy(model, train_loader).item()
+            best_test = accuracy(model, test_loader).item()
+        if patience == 0: break
+        print(epoch, '==\t Loss:\t', epoch_loss/epoch_size, 'LR:\t',scheduler.get_lr(),'Train acc:\t', accuracy(model, train_loader).item(), 'Val acc:\t', val_acc, 'Test acc:\t', accuracy(model, test_loader).item())
 
     # Save the performance
-    train_results.append( accuracy(model, train_loader).item() )
-    test_resutls.append( accuracy(model, test_loader).item() )
+    train_results.append( best_train  )
+    test_resutls.append( best_test )
 
 print( "Final train results:\t", np.mean(np.array( train_results ) ) , np.mean(np.array( train_results ) ) )
 print( "Final test results:\t", np.mean(np.array( test_results ) ) , np.mean(np.array( test_results ) ))
