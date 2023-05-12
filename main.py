@@ -11,6 +11,7 @@ import models
 import sys
 import datasets
 import torch_geometric
+from torch.utils.data.dataloader import default_collate
 
 # Parse the hyperparameters
 parser = argparse.ArgumentParser(description='experiments for randomized linear classifiers')
@@ -63,6 +64,7 @@ for run in range(args.runs):
     def collate_fn(batch):
         if type(batch) == list:
             return batch
+        return default_collate(batch)
     # Create the data loaders
     torch.manual_seed(1234)
     torch.cuda.manual_seed(1234)
