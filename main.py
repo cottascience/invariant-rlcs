@@ -77,8 +77,8 @@ for run in range(args.runs):
         test_dataset = datasets_dict[args.dataset]( args.test_size, args.input_size*2 + 1 , log=True)
         test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
     if args.model == 'gnn':
-        train_dataset.use_graphs
-        test_dataset.use_graphs
+        train_dataset.use_graphs = True
+        test_dataset.use_graphs = True
     seed = random.randint(0, sys.maxsize)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
