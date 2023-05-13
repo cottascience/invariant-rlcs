@@ -37,7 +37,7 @@ class Connectivity(Dataset):
             else:
                 y.append(-1)
             x.append(v)
-            graphs.append( edge_index )
+            graphs.append( to_torch_coo_tensor(edge_index, size=d) )
         self.y = torch.tensor(y).unsqueeze(1)
         print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
         if log: print('Constant classifier:', max( [ 1 - (torch.sum((self.y + 1)/2)/n).item(), (torch.sum((self.y + 1)/2)/n).item()  ]  ) )
@@ -54,9 +54,6 @@ class Connectivity(Dataset):
     # Getting length of the data
     def __len__(self):
         return self.len
-    def collate_fn(batch):
-        if type(batch) == list:
-            return batch
 
 class Sort(Dataset):
      # Constructor

@@ -61,10 +61,6 @@ for run in range(args.runs):
     # Define the optimizer with L2 regularization
     optimizer = optim.Adagrad(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max = args.epochs)
-    def collate_fn(batch):
-        if type(batch) == list:
-            return batch
-        return default_collate(batch)
     # Create the data loaders
     torch.manual_seed(1234)
     torch.cuda.manual_seed(1234)
@@ -75,7 +71,7 @@ for run in range(args.runs):
     val_dataset = datasets_dict[args.dataset]( args.test_size, args.input_size  )
     print('Creating test data')
     test_dataset = datasets_dict[args.dataset]( args.test_size, args.input_size, log=True  )
-    train_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size, shuffle=True, collate_fn=collate_fn)
+    train_loader = DataLoader(dataset = train_dataset, batch_size = args.batch_size, shuffle=True)
     val_loader = DataLoader(dataset = val_dataset, batch_size = args.batch_size)
     test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
     if args.OOD:
