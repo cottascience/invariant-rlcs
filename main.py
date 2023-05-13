@@ -79,6 +79,7 @@ for run in range(args.runs):
         test_loader = DataLoader(dataset = test_dataset, batch_size = args.batch_size)
     if args.model == 'gnn':
         train_dataset.use_graphs = True
+        val_dataset.use_graphs = True
         test_dataset.use_graphs = True
     seed = random.randint(0, sys.maxsize)
     torch.manual_seed(seed)
