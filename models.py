@@ -128,6 +128,8 @@ class RSphereC(torch.nn.Module):
          sigma = self.sigma_mlp( torch.cat([u,u_sigma],dim=1 ))
          b = self.b_mlp( torch.cat([u,u_b],dim=1))
          a = sigma * self.normal.rsample( x.shape  ).to(x.device)
+         print(a,b,x)
+         print('sssssssss')
          return F.tanh(dot(x,self.c1*a) - self.c2*b)
 
 class GIN(torch.nn.Module):
