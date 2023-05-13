@@ -104,7 +104,7 @@ for run in range(args.runs):
     for epoch in range(args.epochs):
         epoch_loss, epoch_size  = 0, 0
         for x,y in train_loader:
-            print( torch.split(x,args.input_size)  )
+            print( torch.split(x.to_dense() ,args.input_size)  )
             if type(x) == list:
                 exit()
                 x = torch_geometric.data.Batch().from_data_list(x)
