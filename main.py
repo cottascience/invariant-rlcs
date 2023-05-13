@@ -104,9 +104,8 @@ for run in range(args.runs):
     for epoch in range(args.epochs):
         epoch_loss, epoch_size  = 0, 0
         for x,y in train_loader:
-            print(x.shape)
-            G = [ g for g in x.to_dense() ]
-            if type(x) == list:
+            if len(x.shape) == 3:
+                G = [ g for g in x.to_dense() ]
                 x = [ torch_geometric.utils.dense_to_sparse(g) for g in G  ]
                 print( x[0]  )
                 exit()
