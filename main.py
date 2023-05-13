@@ -105,7 +105,7 @@ for run in range(args.runs):
         epoch_loss, epoch_size  = 0, 0
         for x,y in train_loader:
             print(x.shape)
-            x = [ g for g in torch.split(x.to_dense(), args.input_size) ]
+            x = [ g for g in x.to_dense() ]
             if type(x) == list:
                 print(len(x))
                 exit()
