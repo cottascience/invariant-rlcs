@@ -104,7 +104,7 @@ for run in range(args.runs):
     for epoch in range(args.epochs):
         epoch_loss, epoch_size  = 0, 0
         for x,y in train_loader:
-            epoch_size += x.shape[0]
+            num_ex = x.shape[0]
             if len(x.shape) == 3:
                 G = [ torch_geometric.utils.dense_to_sparse(g) for g in x.to_dense() ]
                 x = torch_geometric.data.Batch().from_data_list( [ torch_geometric.data.Data( edge_index=g[0], x = torch.ones((args.input_size,1)))  for g in G  ]  )
@@ -116,7 +116,8 @@ for run in range(args.runs):
             loss = criterion(y_hat, y)
             loss.backward()
             optimizer.step()
-            epoch_loss += loss.item()*x.shape[0]
+            epoch_size += num_ex
+            epoch_loss += loss.item()*num_ex
         scheduler.step()
         val_acc = accuracy(model, val_loader).item()
         patience -= 1
