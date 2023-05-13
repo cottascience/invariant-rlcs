@@ -107,9 +107,6 @@ for run in range(args.runs):
             if len(x.shape) == 3:
                 G = [ torch_geometric.utils.dense_to_sparse(g) for g in x.to_dense() ]
                 x = torch_geometric.data.Batch().from_data_list( [ torch_geometric.data.Data( edge_index=g[0], x = torch.ones((args.input_size,1)))  for g in G  ]  )
-                print( x  )
-                exit()
-                x = torch_geometric.data.Batch().from_data_list(x)
             else:
                 x,y = x.repeat(args.k,1), y.repeat(args.k,1)
             if torch.cuda.is_available(): x,y = x.cuda(), y.cuda()
