@@ -52,7 +52,7 @@ for run in range(args.runs):
                                                          dropout_p=args.dropout, use_batchnorm=True)
     if args.model == 'rlc_set': model = models.RSetC( noise_size=args.noise_size, hidden_size=args.hidden_size, num_layers=args.num_layers,
                                                dropout_p=args.dropout, use_batchnorm=True, x_size=args.input_size )
-    if args.model == 'rlc_graph': model = models.RSetC( hidden_size=args.hidden_size, num_layers=args.num_layers,
+    if args.model == 'rlc_graph': model = models.RGraphC( hidden_size=args.hidden_size, num_layers=args.num_layers,
                                                 dropout_p=args.dropout, use_batchnorm=True, x_size=args.input_size )
 
     if torch.cuda.is_available(): model = model.cuda()
