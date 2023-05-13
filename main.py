@@ -105,9 +105,10 @@ for run in range(args.runs):
         epoch_loss, epoch_size  = 0, 0
         for x,y in train_loader:
             print(x.shape)
-            x = [ g for g in x.to_dense() ]
+            G = [ g for g in x.to_dense() ]
             if type(x) == list:
-                print(len(x))
+                x = [ torch_geometric.utils.dense_to_sparse(g) for g in G  ]
+                print( x[0]  )
                 exit()
                 x = torch_geometric.data.Batch().from_data_list(x)
             if torch.cuda.is_available(): x,y = x.cuda(), y.cuda()
