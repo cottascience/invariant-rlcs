@@ -6,7 +6,8 @@ model = sys.argv[2] + '-'
 
 files = os.listdir(task)
 
-files = [f for f in files if f.startswith(model)]
+files = sort([f for f in files if f.startswith(model)])
+
 
 d = []
 mean = []
