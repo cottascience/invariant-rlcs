@@ -19,14 +19,14 @@ for file in files:
         lines = [ line.strip() for line in lines  ]
     start_index = file.index('-') + 1
     end_index = file.index('.')
-    d.append( file[ start_index:end_index  ]  )
+    d.append( int( file[ start_index:end_index  ]  ))
     for line in lines:
         if 'Constant classifier: ' in line:
-            constant.append( line[ len( 'Constant classifier: ' ) :  ]  )
+            constant.append( float(line[ len( 'Constant classifier: ' ) :  ]  ))
         if 'Final test results: ' in line:
             line = line.split(' ')
-            mean.append( line[3]  )
-            std.append( line[4]  )
+            mean.append( float(line[3]  ))
+            std.append( float(line[4]  ))
 print( d  )
 print( mean  )
 print( std  )
