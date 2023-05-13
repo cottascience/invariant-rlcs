@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch_geometric.nn import GINConv, global_add_pool
 from torch_geometric.nn import MLP as torch_geometric_MLP
+import math
 
 def dot( x, a ):
     return torch.bmm(x.view(x.shape[0], 1, x.shape[1]), a.view(a.shape[0], a.shape[1], 1)).reshape(x.shape[0],1)
@@ -72,6 +73,38 @@ class RSetC(torch.nn.Module):
         a = torch.cat(a, dim=1)
         res = dot(x,self.c1*a) - self.c2*b
         return torch.tanh(res)
+
+class RGraphC(torch.nn.Module):
+      def __init__(self, hidden_size, num_layers, dropout_p, use_batchnorm, x_size):
+          super(RGraphC, self).__init__()
+
+          norm = 'batch_norm' if use_batchnorm else None
+          act = nn.LeakyReLU()
+          self.a_mlp = torch_geometric_MLP(in_channels = 4, hidden_channels = hidden_size, out_channels = 1,
+                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
+          self.b_mlp = torch_geometric_MLP(in_channels = 2, hidden_channels = hidden_size, out_channels = 1,
+                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
+          self.noise_size = noise_size
+          self.noise_dist = torch.distributions.Uniform(0,1)
+          self.c1 = torch.nn.Parameter(torch.ones(1)*1)
+          self.c2 = torch.nn.Parameter(torch.ones(1)*1)
+
+      def forward(self, x):
+         num_nodes = math.sqrt(x.shape[1])
+         u = self.noise_dist.rsample([x.shape[0], 1]).to(x.device)
+         ub = self.noise_dist.rsample([x.shape[0], 1]).to(x.device)
+         b = self.b_mlp( torch.cat([u,ub],dim=1) )
+         uij = self.noise_dist.rsample([x.shape[0], num_nodes*num_nodes]).to(x.device)
+         ui = self.noise_dist.rsample([x.shape[0], num_nodes]).to(x.device)
+         uj = self.noise_dist.rsample([x.shape[0], num_nodes]).to(x.device)
+         ui = ui.repeat_interleave(num_nodes).view(x.shape)
+         uj = uj.t().repeat(num_nodes,1).t()
+         a = []
+         for i in range(x.shape[1]):
+             a.append( self.a_mlp( torch.cat([ u[:,i].unsqueeze(1) , uij[:,i].unsqueeze(1), ui[:,i].unsqueeze(1), uj[:,i].unsqueeze(1) ],dim=1) ) )
+         a = torch.cat(a, dim=1)
+         res = dot(x,self.c1*a) - self.c2*b
+         return torch.tanh(res)
 
 class RSphereC(torch.nn.Module):
       def __init__(self, noise_size, hidden_size, num_layers, dropout_p, use_batchnorm, x_size):
