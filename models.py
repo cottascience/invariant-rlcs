@@ -115,7 +115,7 @@ class GIN(torch.nn.Module):
         for conv in self.convs:
             x = conv(x, edge_index).relu()
         x = global_add_pool(x, batch)
-        return self.mlp(x)
+        return F.tanh(self.mlp(x))
 
 
 class MLP(nn.Module):
