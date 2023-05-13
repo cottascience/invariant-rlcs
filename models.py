@@ -100,7 +100,7 @@ class RGraphC(torch.nn.Module):
          uj = uj.t().repeat(num_nodes,1).t()
          a = []
          for i in range(x.shape[1]):
-             a.append( self.a_mlp( torch.cat([ u[:,i].unsqueeze(1) , uij[:,i].unsqueeze(1), ui[:,i].unsqueeze(1), uj[:,i].unsqueeze(1) ],dim=1) ) )
+             a.append( self.a_mlp( torch.cat([ u, uij[:,i].unsqueeze(1), ui[:,i].unsqueeze(1), uj[:,i].unsqueeze(1) ],dim=1) ) )
          a = torch.cat(a, dim=1)
          res = dot(x,self.c1*a) - self.c2*b
          return torch.tanh(res)
