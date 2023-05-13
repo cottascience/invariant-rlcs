@@ -38,7 +38,7 @@ class Connectivity(Dataset):
                 y.append(-1)
             x.append(v)
             graphs.append( to_torch_coo_tensor(edge_index, size=d) )
-        self.y = torch.tensor(y).unsqueeze(1)
+        self.y = torch.tensor(y).unsqueeze(1).float()
         print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
         if log: print('Constant classifier:', max( [ 1 - (torch.sum((self.y + 1)/2)/n).item(), (torch.sum((self.y + 1)/2)/n).item()  ]  ) )
         self.x = torch.cat( x, dim=0 )
