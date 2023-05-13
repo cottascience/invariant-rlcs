@@ -27,7 +27,6 @@ for file in files:
             line = line.split(' ')
             mean.append( line[1]  )
             std.append( line[2]  )
-        d.append(   )
 print( mean  )
 print( std  )
 print( constant  )
