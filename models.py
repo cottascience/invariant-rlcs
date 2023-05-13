@@ -98,7 +98,7 @@ class RGraphC(torch.nn.Module):
          uj = self.noise_dist.rsample([x.shape[0], num_nodes]).to(x.device)
          ui = ui.repeat_interleave(num_nodes).view(x.shape)
          uj = uj.t().repeat(num_nodes,1).t()
-         u = u.repeat_interleave(x.shape[1],1).view(u.shape[0],x.shape[1])
+         #u = u.repeat_interleave(x.shape[1],1).view(u.shape[0],x.shape[1])
          a = []
          for i in range(x.shape[1]):
              a.append( self.a_mlp( torch.cat([ u, uij[:,i].unsqueeze(1), ui[:,i].unsqueeze(1), uj[:,i].unsqueeze(1) ],dim=1) ) )
