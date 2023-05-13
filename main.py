@@ -96,10 +96,10 @@ for run in range(args.runs):
         for x,y in loader:
             total += x.shape[0]
             if len(x.shape) == 3:
+                y = y.float()
                 x = graph_batch(x)
             if torch.cuda.is_available(): x,y = x.cuda(), y.cuda()
             y_hat = torch.zeros_like(y)
-            print(y)
             for _ in range(args.m):
                 y_hat += torch.sign(model(x))
             y_hat = torch.sign(y_hat)
