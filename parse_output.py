@@ -25,8 +25,9 @@ for file in files:
             constant.append( line[ len( 'Constant classifier: ' ) :  ]  )
         if 'Final test results: ' in line:
             line = line.split(' ')
-            mean.append( line[1]  )
-            std.append( line[2]  )
+            mean.append( line[3]  )
+            std.append( line[4]  )
+print( d  )
 print( mean  )
 print( std  )
 print( constant  )
