@@ -104,7 +104,7 @@ for run in range(args.runs):
     for epoch in range(args.epochs):
         epoch_loss, epoch_size  = 0, 0
         for x,y in train_loader:
-            x = [ g for g in torch.split(x.to_dense() ,args.input_size)  )
+            x = [ g for g in torch.split(x.to_dense(), args.input_size) ]
             if type(x) == list:
                 print(len(x))
                 exit()
