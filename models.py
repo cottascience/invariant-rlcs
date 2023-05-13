@@ -89,7 +89,7 @@ class RGraphC(torch.nn.Module):
           self.c2 = torch.nn.Parameter(torch.ones(1)*1)
 
       def forward(self, x):
-         num_nodes = math.sqrt(x.shape[1])
+         num_nodes = int(math.sqrt(x.shape[1]))
          u = self.noise_dist.rsample([x.shape[0], 1]).to(x.device)
          ub = self.noise_dist.rsample([x.shape[0], 1]).to(x.device)
          b = self.b_mlp( torch.cat([u,ub],dim=1) )
