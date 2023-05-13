@@ -2,7 +2,7 @@ import sys
 import os
 
 task = sys.argv[1]
-model = sys.argv[2]
+model = sys.argv[2] + '-'
 
 files = os.listdir(task)
 
