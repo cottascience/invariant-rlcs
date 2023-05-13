@@ -106,7 +106,7 @@ for run in range(args.runs):
         for x,y in train_loader:
             if len(x.shape) == 3:
                 G = [ torch_geometric.utils.dense_to_sparse(g) for g in x.to_dense() ]
-                x = torch_geometric.data.Batch().from_data_list( [ g[0] for g in G  ]  )
+                x = torch_geometric.data.Batch().from_data_list( [ torch_geometric.data.Data( edge_index=g[0], x = torch.ones((args.input_size,1)))  for g in G  ]  )
                 print( x  )
                 exit()
                 x = torch_geometric.data.Batch().from_data_list(x)
