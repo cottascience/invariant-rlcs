@@ -105,13 +105,14 @@ for run in range(args.runs):
         epoch_loss, epoch_size  = 0, 0
         for x,y in train_loader:
             if len(x.shape) == 3:
-                G = [ g for g in x.to_dense() ]
-                x = [ torch_geometric.utils.dense_to_sparse(g) for g in G  ]
-                print( x[0]  )
+                G = [ torch_geometric.utils.dense_to_sparse(g) for g in x.to_dense() ]
+                x = torch_geometric.data.Batch().from_data_list( [ g[0] for g in G  ]  )
+                print( x  )
                 exit()
                 x = torch_geometric.data.Batch().from_data_list(x)
+            else:
+                x,y = x.repeat(args.k,1), y.repeat(args.k,1)
             if torch.cuda.is_available(): x,y = x.cuda(), y.cuda()
-            x,y = x.repeat(args.k,1), y.repeat(args.k,1)
             optimizer.zero_grad()
             y_hat = model(x)
             loss = criterion(y_hat, y)
