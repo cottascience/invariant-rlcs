@@ -99,6 +99,7 @@ for run in range(args.runs):
                 x = graph_batch(x)
             if torch.cuda.is_available(): x,y = x.cuda(), y.cuda()
             y_hat = torch.zeros_like(y)
+            print(torch.sign(model(x)))
             for _ in range(args.m):
                 y_hat += torch.sign(model(x))
             y_hat = torch.sign(y_hat)
