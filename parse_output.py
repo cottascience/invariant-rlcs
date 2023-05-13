@@ -6,7 +6,7 @@ model = sys.argv[2] + '-'
 
 files = os.listdir(task)
 
-files = sort([f for f in files if f.startswith(model)])
+files = sorted([f for f in files if f.startswith(model)])
 
 
 d = []
