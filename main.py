@@ -84,17 +84,24 @@ for run in range(args.runs):
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
 
+    def graph_batch(x):
+        G = [ torch_geometric.utils.dense_to_sparse(g) for g in x.to_dense() ]
+        x = torch_geometric.data.Batch().from_data_list( [ torch_geometric.data.Data( edge_index=g[0], x = torch.ones((args.input_size,1)))  for g in G  ]  )
+        return x
+
     def accuracy( model, loader ):
         model.eval()
         correct, total = 0, 0
         for x,y in loader:
+            total += x.shape[0]
+            if len(x.shape) == 3:
+                x = graph_batch(x)
             if torch.cuda.is_available(): x,y = x.cuda(), y.cuda()
             y_hat = torch.zeros_like(y)
             for _ in range(args.m):
                 y_hat += torch.sign(model(x))
             y_hat = torch.sign(y_hat)
             correct += torch.sum(y_hat == y)
-            total += x.shape[0]
         model.train()
         return correct/total
 
@@ -106,8 +113,7 @@ for run in range(args.runs):
         for x,y in train_loader:
             num_ex = x.shape[0]
             if len(x.shape) == 3:
-                G = [ torch_geometric.utils.dense_to_sparse(g) for g in x.to_dense() ]
-                x = torch_geometric.data.Batch().from_data_list( [ torch_geometric.data.Data( edge_index=g[0], x = torch.ones((args.input_size,1)))  for g in G  ]  )
+                x = graph_batch(x)
             else:
                 x,y = x.repeat(args.k,1), y.repeat(args.k,1)
             if torch.cuda.is_available(): x,y = x.cuda(), y.cuda()
