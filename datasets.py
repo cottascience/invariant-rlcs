@@ -93,7 +93,7 @@ class Ball(Dataset):
          self.x /= self.x.norm(dim=1, keepdim=True)
          scaling_factor = 0.01
          eps = torch.randn(n) * scaling_factor
-         norms = torch.norm(x, dim=1)
+         norms = torch.norm(self.x, dim=1)
          new_norms = norms + eps
          self.x = self.x * (new_norms / norms).unsqueeze(1)
          self.y = 2*(torch.tensor((torch.norm(self.x,dim=1) < self.R), dtype=float)).unsqueeze(1) - 1
