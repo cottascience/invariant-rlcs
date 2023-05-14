@@ -44,6 +44,7 @@ class RLC(torch.nn.Module):
         ub = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
         a = self.a(torch.cat([noise,ua],dim=1))
         b = self.b(torch.cat([noise,ub],dim=1))
+        a = a/F.normalize(a,dim=-1,p=2)
         res = dot(x,self.c1*a) - self.c2*b
         return torch.tanh(res)
 
