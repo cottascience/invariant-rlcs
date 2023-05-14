@@ -24,7 +24,7 @@ class Parity(Dataset):
 class Connectivity(Dataset):
     # Constructor
     def __init__(self, n, d, log=False):
-        p = (1.*math.log(d))/d
+        p = (1.1*math.log(d))/d
         graphs = []
         y = []
         x = []
