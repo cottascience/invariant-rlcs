@@ -115,10 +115,15 @@ class RGraphC(torch.nn.Module):
              uj = self.make_undirected(uj, num_nodes)
 
          uij = torch.ones_like(uij)
-         a = []
-         for i in range(x.shape[1]):
-             a.append( self.a_mlp( torch.cat([ u, uij[:,i].unsqueeze(1), ui[:,i].unsqueeze(1), uj[:,i].unsqueeze(1) ],dim=1) ) )
-         a = torch.cat(a, dim=1)
+         #a = []
+         #for i in range(x.shape[1]):
+             #a.append( self.a_mlp( torch.cat([ u, uij[:,i].unsqueeze(1), ui[:,i].unsqueeze(1), uj[:,i].unsqueeze(1) ],dim=1) ) )
+         #a = torch.cat(a, dim=1)
+
+         u = u.repeat_interleave(num_nodes*num_nodes,1).view(x.shape)
+         a = self.a(torch.stack([u, uij, ui,uj], dim=1))
+         a = a.squeeze(dim=1)
+
          a = a.sigmoid()
 
          res = dot(x,self.c1*a) - self.c2*b
