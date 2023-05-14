@@ -32,7 +32,9 @@ class RLC(torch.nn.Module):
          act = nn.ReLU()
          self.b = torch_geometric_MLP(in_channels = 2*noise_size, hidden_channels = hidden_size, out_channels = 1,
                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
-         self.a = torch_geometric_MLP(in_channels = 2*noise_size, hidden_channels = 2*hidden_size, out_channels = x_size,
+         self.a = torch_geometric_MLP(in_channels = 2*noise_size, hidden_channels = hidden_size, out_channels = x_size,
+                        num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
+         self.ab = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = 1+x_size,
                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
          self.noise_size = noise_size
          self.noise_dist = torch.distributions.Normal(0,1)
@@ -42,9 +44,11 @@ class RLC(torch.nn.Module):
         noise = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
         ua = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
         ub = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
-        a = self.a(torch.cat([noise,ua],dim=1))
-        b = self.b(torch.cat([noise,ub],dim=1))
-        a = a/F.normalize(a,dim=-1,p=2)
+        #a = self.a(torch.cat([noise,ua],dim=1))
+        #b = self.b(torch.cat([noise,ub],dim=1))
+        ab = self.ab(noise)
+        a = ab[:,:-1]
+        b = ab[:,-1].unsqueeze(1)
         res = dot(x,self.c1*a) - self.c2*b
         return torch.tanh(res)
 
