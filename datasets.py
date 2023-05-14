@@ -32,7 +32,7 @@ class Connectivity(Dataset):
             edge_index = erdos_renyi_graph(d,p)
             v = to_torch_coo_tensor(edge_index, size=d).to_dense().view((1,d*d))
             G = to_networkx( Data(edge_index=edge_index, x = torch.ones((d,1)), v=v  ), to_undirected=True  )
-            if nx.diameter(G) > d/4:
+            if nx.diameter(G) > 1:
                 #if nx.is_connected(G):
                 y.append(1)
             else:
