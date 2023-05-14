@@ -42,7 +42,7 @@ class RLC(torch.nn.Module):
         noise = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
         ua = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
         ub = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
-        a = self.a(torch.cat([noise,ua],dim=1)).sigmoid()
+        a = self.a(torch.cat([noise,ua],dim=1))
         b = self.b(torch.cat([noise,ub],dim=1))
         res = dot(x,self.c1*a) - self.c2*b
         return torch.tanh(res)
