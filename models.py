@@ -103,7 +103,7 @@ class RGraphC(torch.nn.Module):
           selected_X = upper_triangular.view(B, num_selected)
           return selected_X
 
-      def forward(self, x, undirected=True, ood=False):
+      def forward(self, x, undirected=True):
          num_nodes = int(math.sqrt(x.shape[1]))
          u = self.noise_dist.rsample([x.shape[0], 1]).to(x.device)
          ub = self.noise_dist.rsample([x.shape[0], 1]).to(x.device)
@@ -129,10 +129,7 @@ class RGraphC(torch.nn.Module):
 
          a = a.sigmoid()
 
-         if ood:
-             res = dot(x,self.c1*a)/(x.shape[1]*2 + 1) - self.c2*b
-         else:
-             res = dot(x,self.c1*a) - self.c2*b
+         res = dot(x,self.c1*a) - self.c2*b
 
          return torch.tanh(res)
 

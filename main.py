@@ -95,7 +95,7 @@ for run in range(args.runs):
             x = torch_geometric.data.Batch().from_data_list( [ torch_geometric.data.Data( edge_index=g[0], x = torch.ones((args.input_size,1)))  for g in G  ]  )
         return x
 
-    def accuracy( model, loader, ood=False ):
+    def accuracy( model, loader ):
         model.eval()
         correct, total = 0, 0
         for x,y in loader:
@@ -106,10 +106,7 @@ for run in range(args.runs):
             if torch.cuda.is_available(): x,y = x.cuda(), y.cuda()
             y_hat = torch.zeros_like(y)
             for _ in range(args.m):
-                if ood and args.model == 'rlc_graph':
-                    y_hat += torch.sign(model(x,ood=True))
-                else:
-                    y_hat += torch.sign(model(x))
+                y_hat += torch.sign(model(x))
             y_hat = torch.sign(y_hat)
             correct += torch.sum(y_hat == y)
         model.train()
@@ -140,10 +137,10 @@ for run in range(args.runs):
         if val_acc > best_val:
             best_val = val_acc
             best_train = accuracy(model, train_loader).item()
-            best_test = accuracy(model, test_loader, ood=args.OOD).item()
+            best_test = accuracy(model, test_loader).item()
             patience = args.patience
         if patience == 0: break
-        print(epoch, '==\t Loss:\t', epoch_loss/epoch_size, 'LR:\t',scheduler.get_lr(),'Train acc:\t', accuracy(model, train_loader).item(), 'Val acc:\t', val_acc, 'Test acc:\t', accuracy(model, test_loader, ood=args.OOD).item(), 'Patience:\t', patience, best_val)
+        print(epoch, '==\t Loss:\t', epoch_loss/epoch_size, 'LR:\t',scheduler.get_lr(),'Train acc:\t', accuracy(model, train_loader).item(), 'Val acc:\t', val_acc, 'Test acc:\t', accuracy(model, test_loader).item(), 'Patience:\t', patience, best_val)
 
     # Save the performance
     train_results.append( best_train  )
