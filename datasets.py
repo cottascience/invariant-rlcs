@@ -91,8 +91,11 @@ class Ball(Dataset):
          normal = torch.distributions.Normal(0., 1.)
          self.x = normal.rsample([n,d])
          self.x /= self.x.norm(dim=1, keepdim=True)
-         uniform_radius = torch.pow(torch.rand(n, 1), 1/d)
-         self.x = 1.1 *  uniform_radius * self.x
+         scaling_factor = 0.01
+         eps = torch.randn(n) * scaling_factor
+         norms = torch.norm(x, dim=1)
+         new_norms = norms + eps
+         self.x = self.x * (new_norms / norms).unsqueeze(1)
          self.y = 2*(torch.tensor((torch.norm(self.x,dim=1) < self.R), dtype=float)).unsqueeze(1) - 1
          self.len = n
          print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
