@@ -7,4 +7,4 @@
 #SBATCH --gres=gpu:1
 #SBATCH --array=5-101:4
 echo $SLURM_ARRAY_TASK_ID
-python main.py --dataset ball --model mlp --lr 0.001 --input_size $SLURM_ARRAY_TASK_ID --hidden_size $SLURM_ARRAY_TASK_ID  --k 1 --m 1 --train_size 1000  > ball/mlp-$SLURM_ARRAY_TASK_ID.txt
+python main.py --dataset ball --patience 30 --model mlp --lr 0.001 --input_size $SLURM_ARRAY_TASK_ID --hidden_size $SLURM_ARRAY_TASK_ID  --k 1 --m 1 --train_size 1000  > ball/mlp-$SLURM_ARRAY_TASK_ID.txt
