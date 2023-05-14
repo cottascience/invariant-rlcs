@@ -121,6 +121,7 @@ class RGraphC(torch.nn.Module):
          #a = torch.cat(a, dim=1)
 
          u = u.repeat_interleave(x.shape[1],1).view(x.shape)
+         print( torch.stack([u, uij, ui,uj], dim=1).shape  )
          a = self.a_mlp(torch.stack([u, uij, ui,uj], dim=1))
          a = a.squeeze(dim=1)
 
