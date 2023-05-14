@@ -92,8 +92,7 @@ class Ball(Dataset):
          self.x = normal.rsample([n,d])
          self.x /= self.x.norm(dim=1, keepdim=True)
          scaling_factor = 0.1
-         print('a')
-         eps = torch.randn(n) * scaling_factor
+         eps = torch.randn(1) * scaling_factor
          norms = torch.norm(self.x, dim=1)
          new_norms = norms + eps
          self.x = self.x * (new_norms / norms).unsqueeze(1)
