@@ -114,6 +114,7 @@ class RGraphC(torch.nn.Module):
              ui = self.make_undirected(ui, num_nodes)
              uj = self.make_undirected(uj, num_nodes)
 
+         uij = torch.ones_line(uij)
          a = []
          for i in range(x.shape[1]):
              a.append( self.a_mlp( torch.cat([ u, uij[:,i].unsqueeze(1), ui[:,i].unsqueeze(1), uj[:,i].unsqueeze(1) ],dim=1) ) )
