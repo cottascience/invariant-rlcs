@@ -45,11 +45,11 @@ class RLC(torch.nn.Module):
         noise = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
         ua = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
         ub = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
-        #a = self.a(torch.cat([noise,ua],dim=1))
-        #b = self.b(torch.cat([noise,ub],dim=1))
-        ab = self.layer_norm(self.ab(noise))
-        a = ab[:,:-1]
-        b = ab[:,-1].unsqueeze(1)
+        a = self.a(torch.cat([noise,ua],dim=1))
+        b = self.b(torch.cat([noise,ub],dim=1))
+        #ab = self.layer_norm(self.ab(noise))
+        #a = ab[:,:-1]
+        #b = ab[:,-1].unsqueeze(1)
         #print(a,b,self.c1, self.c2)
         #print('aaaaa')
         res = dot(x,self.c1*a) - self.c2*b
