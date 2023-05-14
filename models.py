@@ -84,7 +84,7 @@ class RGraphC(torch.nn.Module):
                          num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
           self.b_mlp = torch_geometric_MLP(in_channels = 2, hidden_channels = hidden_size, out_channels = 1,
                          num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
-          self.noise_dist = torch.distributions.Normal(0,1)
+          self.noise_dist = torch.distributions.Uniform(-.5,.5)
           self.c1 = torch.nn.Parameter(torch.ones(1)*1)
           self.c2 = torch.nn.Parameter(torch.ones(1)*1)
 
