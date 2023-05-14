@@ -86,7 +86,7 @@ class RGraphC(torch.nn.Module):
                          num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
           self.noise_dist = torch.distributions.Uniform(-.5,.5)
           self.c1 = torch.nn.Parameter(torch.ones(1)*1)
-          self.c2 = torch.nn.Parameter(torch.ones(1)*1)
+          self.c2 = torch.nn.Parameter(torch.ones(1)*45)
 
       def make_undirected(self, X, N):
           B = X.shape[0]
