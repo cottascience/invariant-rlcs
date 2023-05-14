@@ -89,7 +89,10 @@ for run in range(args.runs):
 
     def graph_batch(x):
         G = [ torch_geometric.utils.dense_to_sparse(g) for g in x.to_dense() ]
-        x = torch_geometric.data.Batch().from_data_list( [ torch_geometric.data.Data( edge_index=g[0], x = torch.ones((args.input_size,1)))  for g in G  ]  )
+        if args.OOD:
+            x = torch_geometric.data.Batch().from_data_list( [ torch_geometric.data.Data( edge_index=g[0], x = torch.ones((2*args.input_size+1,1)))  for g in G  ]  )
+        else:
+            x = torch_geometric.data.Batch().from_data_list( [ torch_geometric.data.Data( edge_index=g[0], x = torch.ones((args.input_size,1)))  for g in G  ]  )
         return x
 
     def accuracy( model, loader ):
