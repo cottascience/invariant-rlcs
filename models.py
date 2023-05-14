@@ -29,7 +29,7 @@ class RLC(torch.nn.Module):
          super(RLC, self).__init__()
 
          norm = 'batch_norm' if use_batchnorm else None
-         act = nn.ReLU()
+         act = nn.Sigmoid()
          self.b = torch_geometric_MLP(in_channels = 2*noise_size, hidden_channels = hidden_size, out_channels = 1,
                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
          self.a = torch_geometric_MLP(in_channels = 2*noise_size, hidden_channels = hidden_size, out_channels = x_size,
