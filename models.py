@@ -29,7 +29,7 @@ class RLC(torch.nn.Module):
          super(RLC, self).__init__()
 
          norm = 'batch_norm' if use_batchnorm else None
-         act = nn.Sigmoid()
+         act = nn.LeakyReLU()
          self.b = torch_geometric_MLP(in_channels = 2*noise_size, hidden_channels = hidden_size, out_channels = 1,
                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
          self.a = torch_geometric_MLP(in_channels = 2*noise_size, hidden_channels = hidden_size, out_channels = x_size,
@@ -37,7 +37,7 @@ class RLC(torch.nn.Module):
          self.ab = torch_geometric_MLP(in_channels = noise_size, hidden_channels = hidden_size, out_channels = 1+x_size,
                         num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
          self.noise_size = noise_size
-         self.noise_dist = torch.distributions.Normal(0,1)
+         self.noise_dist = torch.distributions.HalfNormal(0,1)
          self.c1 = torch.nn.Parameter(torch.ones(1)*1.)
          self.c2 = torch.nn.Parameter(torch.ones(1)*1.)
          self.layer_norm = nn.LayerNorm(1+x_size)
@@ -45,9 +45,9 @@ class RLC(torch.nn.Module):
         noise = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
         ua = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
         ub = self.noise_dist.rsample([x.shape[0], self.noise_size]).to(x.device)
-        #a = self.a(torch.cat([noise,ua],dim=1))
-        #b = self.b(torch.cat([noise,ub],dim=1))
-        ab = self.layer_norm(self.ab(noise))
+        a = self.a(torch.cat([noise,ua],dim=1))
+        b = self.b(torch.cat([noise,ub],dim=1))
+        #ab = self.layer_norm(self.ab(noise))
         a = ab[:,:-1]
         b = ab[:,-1].unsqueeze(1)
         res = dot(x,a) - b
