@@ -50,7 +50,7 @@ class RLC(torch.nn.Module):
         #ab = self.layer_norm(self.ab(noise))
         #a = ab[:,:-1]
         #b = ab[:,-1].unsqueeze(1)
-        res = dot(x,a) - b
+        res = dot(x,self.c1*a) - self.c2*b
         return torch.tanh(res)
 
 class RSetC(torch.nn.Module):
