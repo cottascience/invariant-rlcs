@@ -131,7 +131,7 @@ for run in range(args.runs):
         scheduler.step()
         val_acc = accuracy(model, val_loader).item()
         patience -= 1
-        if val_acc >= best_val:
+        if val_acc > best_val:
             best_val = val_acc
             best_train = accuracy(model, train_loader).item()
             best_test = accuracy(model, test_loader).item()
