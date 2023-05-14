@@ -85,10 +85,19 @@ class RGraphC(torch.nn.Module):
           self.b_mlp = torch_geometric_MLP(in_channels = 2, hidden_channels = hidden_size, out_channels = 1,
                          num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
           self.noise_dist = torch.distributions.Normal(0,1)
-          self.c1 = torch.nn.Parameter(torch.ones(1)*10)
-          self.c2 = torch.nn.Parameter(torch.ones(1)*10)
+          self.c1 = torch.nn.Parameter(torch.ones(1)*1)
+          self.c2 = torch.nn.Parameter(torch.ones(1)*1)
 
-      def forward(self, x):
+      def make_undirected(self, X, N):
+          B = X.shape[0]
+          X = X.view(B, N, N)
+          mask = torch.triu(torch.ones(N, N)) > 0
+          upper_triangular = X[:, mask]
+          num_selected = (N*(N+1)) // 2
+          selected_X = upper_triangular.view(B, num_selected)
+          return selected_X
+
+      def forward(self, x, undirected=True):
          num_nodes = int(math.sqrt(x.shape[1]))
          u = self.noise_dist.rsample([x.shape[0], 1]).to(x.device)
          ub = self.noise_dist.rsample([x.shape[0], 1]).to(x.device)
@@ -98,12 +107,20 @@ class RGraphC(torch.nn.Module):
          uj = self.noise_dist.rsample([x.shape[0], num_nodes]).to(x.device)
          ui = ui.repeat_interleave(num_nodes).view(x.shape)
          uj = uj.t().repeat(num_nodes,1).t()
-         #u = u.repeat_interleave(x.shape[1],1).view(u.shape[0],x.shape[1])
+
+         if undirected:
+             x = self.make_undirected(x,num_nodes)
+             uij = self.make_undirected(uij, num_nodes)
+             ui = self.make_undirected(ui, num_nodes)
+             uj = self.make_undirected(uj, num_nodes)
+
          a = []
          for i in range(x.shape[1]):
              a.append( self.a_mlp( torch.cat([ u, uij[:,i].unsqueeze(1), ui[:,i].unsqueeze(1), uj[:,i].unsqueeze(1) ],dim=1) ) )
          a = torch.cat(a, dim=1)
+
          res = dot(x,self.c1*a) - self.c2*b
+
          return torch.tanh(res)
 
 class RSphereC(torch.nn.Module):
