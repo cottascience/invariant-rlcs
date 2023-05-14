@@ -92,7 +92,7 @@ class Ball(Dataset):
          self.x = normal.rsample([n,d])
          self.x /= self.x.norm(dim=1, keepdim=True)
          uniform_radius = torch.pow(torch.rand(n, 1), 1/d)
-         self.x = self.R * uniform_radius * self.x
+         self.x = self.R * 2 *  uniform_radius * self.x
          self.y = 2*(torch.tensor((torch.norm(self.x,dim=1) < self.R), dtype=float)).unsqueeze(1) - 1
          self.len = n
          print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
