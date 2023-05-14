@@ -85,8 +85,8 @@ class RGraphC(torch.nn.Module):
           self.b_mlp = torch_geometric_MLP(in_channels = 2, hidden_channels = hidden_size, out_channels = 1,
                          num_layers=num_layers, norm=norm, dropout=dropout_p, act=act)
           self.noise_dist = torch.distributions.Normal(0,1)
-          self.c1 = torch.nn.Parameter(torch.ones(1)*1)
-          self.c2 = torch.nn.Parameter(torch.ones(1)*1)
+          self.c1 = torch.nn.Parameter(torch.ones(1)*10)
+          self.c2 = torch.nn.Parameter(torch.ones(1)*10)
 
       def forward(self, x):
          num_nodes = int(math.sqrt(x.shape[1]))
@@ -103,8 +103,6 @@ class RGraphC(torch.nn.Module):
          for i in range(x.shape[1]):
              a.append( self.a_mlp( torch.cat([ u, uij[:,i].unsqueeze(1), ui[:,i].unsqueeze(1), uj[:,i].unsqueeze(1) ],dim=1) ) )
          a = torch.cat(a, dim=1)
-         print(a,b,x)
-         print('sssssssss')
          res = dot(x,self.c1*a) - self.c2*b
          return torch.tanh(res)
 
