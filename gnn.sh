@@ -7,4 +7,4 @@
 #SBATCH --gres=gpu:1
 #SBATCH --array=5-20:5
 echo $SLURM_ARRAY_TASK_ID
-python main.py --dataset connectivity --model gnn --k 1 --m 1 --lr 0.01 --input_size 15 --hidden_size 2 --num_layers 3 --train_size 1000 --batch_size 100 > connectivity/gnn-$SLURM_ARRAY_TASK_ID.txt
+python main.py --dataset connectivity --model gnn --k 1 --m 1 --lr 0.01 --input_size $SLURM_ARRAY_TASK_ID --hidden_size 2 --num_layers 3 --train_size 1000 --batch_size 100 > connectivity/gnn-$SLURM_ARRAY_TASK_ID.txt
