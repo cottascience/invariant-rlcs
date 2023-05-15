@@ -5,6 +5,6 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=32GB
 #SBATCH --gres=gpu:1
-#SBATCH --array=4-101:16
+#SBATCH --array=32-128:32
 echo $SLURM_ARRAY_TASK_ID
-python main.py --noise_size 4 --dataset ball --patience 30 --model rlc --input_size $SLURM_ARRAY_TASK_ID --hidden_size $SLURM_ARRAY_TASK_ID --train_size 1000 --lr 0.5 --batch_size 100 --k 10000 > ball/rlc-$SLURM_ARRAY_TASK_ID.txt
+python main.py --noise_size 3 --dataset ball --patience 30 --model rlc --input_size $SLURM_ARRAY_TASK_ID --hidden_size $SLURM_ARRAY_TASK_ID --train_size 1000 --lr 0.25 --batch_size 100 --k 10 > ball/rlc-$SLURM_ARRAY_TASK_ID.txt
