@@ -52,7 +52,7 @@ class RLC(torch.nn.Module):
         #b = ab[:,-1].unsqueeze(1)
         #print(a,b,self.c1, self.c2)
         #print('aaaaa')
-        a = a/a.norm(dim=1, keepdim=True)
+        a = a/a.norm(dim=1, keepdim=True, p=1)
         res = dot(x,self.c1*a) - self.c2*b
         return torch.tanh(res)
 
