@@ -120,7 +120,7 @@ class Sin(Dataset):
          self.x_ /= self.x_.norm(dim=1, keepdim=True)
          self.f = torch.sin( math.pi * math.pow(d//2+1,3) * dot( self.x, self.x_ ) )
          self.x = torch.cat([self.x, self.x_], dim=1)
-         self.y = 2*(torch.tensor((self.f < 0), dtype=float)).unsqueeze(1) - 1
+         self.y = 2*(torch.tensor((self.f < 0), dtype=float)) - 1
          print(self.x.shape, self.y.shape)
          self.len = n
          print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
