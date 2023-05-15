@@ -91,7 +91,7 @@ class Ball(Dataset):
          normal = torch.distributions.Normal(0., 1.)
          self.x = normal.rsample([n,d])
          self.x /= self.x.norm(dim=1, keepdim=True)
-         scaling_factor = .15
+         scaling_factor = .1
          eps = torch.randn(n) * scaling_factor
          norms = torch.norm(self.x, dim=1)
          new_norms = norms + eps
