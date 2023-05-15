@@ -46,7 +46,7 @@ for run in range(args.runs):
     # Init the model
     if args.model == 'mlp': model = models.MLP( num_layers=args.num_layers, layer_size = args.hidden_size, input_size=args.input_size, output_size=1, dropout_p=args.dropout, use_batchnorm=True )
     if args.model == 'gnn': model = models.GIN( in_channels=1, hidden_channels=args.hidden_size, out_channels=1, num_layers=args.num_layers  )
-    if args.model == 'rlc': model = models.RLC( noise_size=args.noise_size, hidden_size=args.hidden_size, num_layers=args.num_layers, dropout_p=args.dropout, use_batchnorm=True, x_size=args.input_size )
+    if args.model == 'rlc': model = models.RLC( noise_size=args.noise_size, hidden_size=args.hidden_size, num_layers=args.num_layers, dropout_p=args.dropout, use_batchnorm=False, x_size=args.input_size )
     if args.model == 'rlc_sphere': model = models.RSphereC( noise_size=args.noise_size, hidden_size=args.hidden_size, num_layers=args.num_layers, dropout_p=args.dropout, use_batchnorm=True, x_size=args.input_size )
     if args.model == 'deepsets': model = models.DeepSets(hidden_size=args.hidden_size, num_layers=args.num_layers,
                                                          dropout_p=args.dropout, use_batchnorm=True)
