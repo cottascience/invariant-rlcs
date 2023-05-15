@@ -114,11 +114,11 @@ class Sin(Dataset):
      # Constructor
      def __init__(self, n,d,log=False):
          normal = torch.distributions.Normal(0., 1.)
-         self.x = normal.rsample([n,d])
+         self.x = normal.rsample([n,d//2])
          self.x /= self.x.norm(dim=1, keepdim=True)
-         self.x_ = normal.rsample([n,d])
+         self.x_ = normal.rsample([n,d//2])
          self.x_ /= self.x_.norm(dim=1, keepdim=True)
-         self.f = torch.sin( math.pi * math.pow(d+1,3) * dot( self.x, self.x_ ) )
+         self.f = torch.sin( math.pi * math.pow(d//2+1,3) * dot( self.x, self.x_ ) )
          self.x = torch.cat([self.x, self.x_], dim=1)
          self.y = 2*(torch.tensor((self.f < 0), dtype=float)).unsqueeze(1) - 1
          self.len = n
