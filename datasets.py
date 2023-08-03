@@ -88,9 +88,10 @@ class Range(Dataset):
       # Constructor
       def __init__(self, n, d, log=False):
 
-          self.x = torch.randint(100, (n, d)).float()
+          normal = torch.distributions.Normal(100, 10)
+          self.x = normal.rsample( [n,d ] )
           f = torch.max(self.x, dim=1)[0] - torch.min(self.x, dim=1)[0]
-          self.y = 2*(torch.tensor(( f < 80), dtype=float)).unsqueeze(1) - 1
+          self.y = 2*(torch.tensor(( f < 10), dtype=float)).unsqueeze(1) - 1
           self.len = n
           self.f = f
           print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
