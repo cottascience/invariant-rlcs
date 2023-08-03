@@ -31,7 +31,7 @@ parser.add_argument('--m', type=int, default=100, help='number of samples used i
 parser.add_argument('--k', type=int, default=100, help='number of samples used in RLCs for train')
 parser.add_argument('--noise_size', type=int, default=1, help='number of noise variables in RLCs')
 parser.add_argument('--model', choices=['mlp', 'gnn', 'deepsets' ,'rlc', 'rlc_set', 'rlc_graph', 'rlc_sphere'], default='mlp')
-parser.add_argument('--dataset', choices=['ball', 'parity', 'sort', 'connectivity', 'sin'], default='ball')
+parser.add_argument('--dataset', choices=['ball', 'parity', 'sort', 'range' , 'connectivity', 'sin'], default='ball')
 parser.add_argument('--OOD', action='store_true')
 
 args = parser.parse_args()
@@ -66,7 +66,7 @@ for run in range(args.runs):
     # Create the data loaders
     torch.manual_seed(1234)
     torch.cuda.manual_seed(1234)
-    datasets_dict = { 'ball': datasets.Ball, 'parity': datasets.Parity , 'sort': datasets.Sort , 'connectivity': datasets.Connectivity, 'sin': datasets.Sin }
+    datasets_dict = { 'ball': datasets.Ball, 'parity': datasets.Parity , 'range': datasets.Range ,'sort': datasets.Sort , 'connectivity': datasets.Connectivity, 'sin': datasets.Sin }
     print('Creating training data')
     train_dataset = datasets_dict[args.dataset]( args.train_size, args.input_size  )
     print('Creating validation data')

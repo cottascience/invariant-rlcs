@@ -84,6 +84,25 @@ class Sort(Dataset):
      def __len__(self):
          return self.len
 
+class Range(Dataset):
+      # Constructor
+      def __init__(self, n, d, log=False):
+
+          self.x = torch.randint(100, (n, d))
+          f = self.x.max(1) - self.x.min(0)
+          self.y = 2*(torch.tensor(( f < 20), dtype=float)).unsqueeze(1) - 1
+          self.len = n
+          self.f = f
+          print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
+          if log: print('Constant classifier:', max( [ 1 - (torch.sum((self.y + 1)/2)/n).item(), (torch.sum((self.y + 1)/2)/n).item()  ]  ) )
+          # Getting the data
+      def __getitem__(self, index):
+          return self.x[index], self.y[index]
+      # Getting length of the data
+      def __len__(self):
+          return self.len
+
+
 class Ball(Dataset):
      # Constructor
      def __init__(self, n,d,log=False):
