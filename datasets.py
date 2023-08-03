@@ -89,7 +89,7 @@ class Range(Dataset):
       def __init__(self, n, d, log=False):
 
           self.x = torch.randint(100, (n, d))
-          f = self.x.max(1) - self.x.min(0)
+          f = torch.max(self.x, dim=1)[0] - torch.min(self.x, dim=1)[0]
           self.y = 2*(torch.tensor(( f < 20), dtype=float)).unsqueeze(1) - 1
           self.len = n
           self.f = f
