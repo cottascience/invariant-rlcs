@@ -89,8 +89,8 @@ class Range(Dataset):
       def __init__(self, n, d, log=False):
 
           self.x = torch.randint(100, (n, d)).float()
-          f = torch.sum(self.x, dim=1)
-          self.y = 2*(torch.tensor(( f < 50*d), dtype=float)).unsqueeze(1) - 1
+          f = torch.var(self.x, dim=1)
+          self.y = 2*(torch.tensor(( f < 10), dtype=float)).unsqueeze(1) - 1
           self.len = n
           self.f = f
           print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
