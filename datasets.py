@@ -87,7 +87,6 @@ class Sort(Dataset):
 class Range(Dataset):
       # Constructor
       def __init__(self, n, d, log=False):
-
           self.x = torch.randint(100, (n, d)).float()
           f = torch.var(self.x, dim=1)
           self.y = 2*(torch.tensor(( f < 816), dtype=float)).unsqueeze(1) - 1
