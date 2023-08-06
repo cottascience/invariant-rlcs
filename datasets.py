@@ -87,7 +87,7 @@ class Sort(Dataset):
 class Range(Dataset):
       # Constructor
       def __init__(self, n, d, log=False):
-          self.x = torch.randint(10, (n, d)).float()
+          self.x = torch.randint(d, (n, d)).float()
           f = []
           for row in self.x:
               f.append(len(torch.unique(row)))
