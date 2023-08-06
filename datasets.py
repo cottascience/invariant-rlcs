@@ -87,9 +87,9 @@ class Sort(Dataset):
 class Range(Dataset):
       # Constructor
       def __init__(self, n, d, log=False):
-          self.x = torch.randint(100, (n, d)).float()
-          f = torch.var(self.x, dim=1)
-          self.y = 2*(torch.tensor(( f < 816), dtype=float)).unsqueeze(1) - 1
+          self.x = torch.randint(10, (n, d)).float()
+          f = torch.unique(self.x,dim=1).sum(1)
+          self.y = 2*(torch.tensor(( f < 5*d), dtype=float)).unsqueeze(1) - 1
           self.len = n
           self.f = f
           print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
