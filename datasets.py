@@ -92,7 +92,7 @@ class Range(Dataset):
           for row in self.x:
               f.append(torch.var(row).item())
           f = torch.tensor(f)
-          self.y = 2*(torch.tensor(( f < d*0.7), dtype=float)).unsqueeze(1) - 1
+          self.y = 2*(torch.tensor(( f < (d*d -1)/12 ), dtype=float)).unsqueeze(1) - 1
           self.len = n
           self.f = f
           print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
