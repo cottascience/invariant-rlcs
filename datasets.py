@@ -87,10 +87,10 @@ class Sort(Dataset):
 class Range(Dataset):
       # Constructor
       def __init__(self, n, d, log=False):
-          normal = torch.distributions.Normal(0, 1)
+          normal = torch.distributions.Normal(0, 10)
           self.x = normal.rsample( [n,d ]  )
           f = torch.var(self.x, dim=1)
-          self.y = 2*(torch.tensor(( f < 1), dtype=float)).unsqueeze(1) - 1
+          self.y = 2*(torch.tensor(( f < 10), dtype=float)).unsqueeze(1) - 1
           self.len = n
           self.f = f
           print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
