@@ -1,0 +1,13 @@
+---Settings being used---
+Namespace(input_size=3, hidden_size=3, num_layers=1, train_size=250, test_size=100, lr=0.05, epochs=1000, runs=5, patience=30, batch_size=250, dropout=0.0, weight_decay=0.0, m=100, k=10000, noise_size=1, model='rlc', dataset='sin', OOD=False)
+-------------------------
+Creating training data
+torch.Size([250, 2]) torch.Size([250, 1])
+Ratio  +/-:	 tensor(0.4320, dtype=torch.float64)
+Creating validation data
+torch.Size([100, 2]) torch.Size([100, 1])
+Ratio  +/-:	 tensor(0.4400, dtype=torch.float64)
+Creating test data
+torch.Size([100, 2]) torch.Size([100, 1])
+Ratio  +/-:	 tensor(0.5700, dtype=torch.float64)
+Constant classifier: 0.57

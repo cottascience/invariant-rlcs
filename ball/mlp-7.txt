@@ -1,0 +1,13 @@
+---Settings being used---
+Namespace(input_size=7, hidden_size=7, num_layers=1, train_size=1000, test_size=100, lr=0.01, epochs=1000, runs=5, patience=30, batch_size=100, dropout=0.0, weight_decay=0.0, m=1, k=1, noise_size=1, model='mlp', dataset='sin', OOD=False)
+-------------------------
+Creating training data
+torch.Size([1000, 6]) torch.Size([1000, 1])
+Ratio  +/-:	 tensor(0.4990, dtype=torch.float64)
+Creating validation data
+torch.Size([100, 6]) torch.Size([100, 1])
+Ratio  +/-:	 tensor(0.4700, dtype=torch.float64)
+Creating test data
+torch.Size([100, 6]) torch.Size([100, 1])
+Ratio  +/-:	 tensor(0.4700, dtype=torch.float64)
+Constant classifier: 0.53
