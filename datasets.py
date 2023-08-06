@@ -87,7 +87,10 @@ class Sort(Dataset):
 class Range(Dataset):
       # Constructor
       def __init__(self, n, d, log=False):
-          self.x = torch.randint(d, (n, d)).float()
+          mean = 0.
+          scale = 1.
+          normal = torch.distributions.Normal(mean, scale)
+          self.x = normal.rsample( [n,d ]  )
           f = []
           for row in self.x:
               f.append(torch.sign(row).sum().item())
