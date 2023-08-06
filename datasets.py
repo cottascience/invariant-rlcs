@@ -90,7 +90,7 @@ class Range(Dataset):
           self.x = torch.randint(d, (n, d)).float()
           f = []
           for row in self.x:
-              f.append(len(torch.var(row).item()))
+              f.append(torch.var(row).item())
           f = torch.tensor(f)
           self.y = 2*(torch.tensor(( f < d*0.7), dtype=float)).unsqueeze(1) - 1
           self.len = n
