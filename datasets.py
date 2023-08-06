@@ -90,7 +90,7 @@ class Range(Dataset):
           normal = torch.distributions.Normal(0, 10)
           self.x = normal.rsample( [n,d ]  )
           f = torch.var(self.x, dim=1)
-          self.y = 2*(torch.tensor(( f < 10), dtype=float)).unsqueeze(1) - 1
+          self.y = 2*(torch.tensor(( f < 5), dtype=float)).unsqueeze(1) - 1
           self.len = n
           self.f = f
           print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
