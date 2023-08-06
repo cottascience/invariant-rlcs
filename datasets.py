@@ -91,9 +91,8 @@ class Range(Dataset):
           f = []
           for row in self.x:
               f.append(len(torch.unique(row)))
-          print(f)
           f = torch.tensor(f)
-          self.y = 2*(torch.tensor(( f < d*0.9), dtype=float)).unsqueeze(1) - 1
+          self.y = 2*(torch.tensor(( f < d*0.7), dtype=float)).unsqueeze(1) - 1
           self.len = n
           self.f = f
           print('Ratio  +/-:\t', torch.sum((self.y + 1)/2)/n )
